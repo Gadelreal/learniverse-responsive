@@ -87,7 +87,7 @@ const Index = () => {
                 style={{ animationDelay: `${i * 100}ms` }}
               >
                 <img
-                  src={`https://images.unsplash.com/photo-148859028505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80`}
+                  src={`https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80`}
                   alt="Course thumbnail"
                   className="w-full h-48 object-cover"
                 />
