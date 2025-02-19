@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import VideoPlayer from "../components/VideoPlayer";
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <a
@@ -78,8 +79,11 @@ const Index = () => {
           <div className="max-w-3xl mx-auto">
             <p className="font-inter text-muted-foreground leading-relaxed mb-8 animate-fade-up">
               Watch the following video where the professor explains the key components you need to consider in the context of a brand.
-              Video 2: Brand Audit: What Is Happening Around?
             </p>
+            <VideoPlayer 
+              title="Brand Audit: What Is Happening Around?"
+              src="https://www.youtube.com/embed/YOUR_VIDEO_ID" // Replace YOUR_VIDEO_ID with the actual YouTube video ID
+            />
             <div className="bg-white p-6 rounded-lg shadow-sm animate-fade-up">
               <h3 className="font-playfair text-xl font-bold mb-4">Brand Strategy</h3>
               <p className="font-inter text-muted-foreground">
