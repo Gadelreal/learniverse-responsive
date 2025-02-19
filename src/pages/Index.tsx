@@ -23,15 +23,15 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <a href="/" className="font-playfair text-xl font-bold text-secondary-foreground">
-              EduContent
+              Brand Strategy
             </a>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8">
-              <NavLink href="#courses">Courses</NavLink>
-              <NavLink href="#about">About</NavLink>
-              <NavLink href="#categories">Categories</NavLink>
-              <NavLink href="#contact">Contact</NavLink>
+              <NavLink href="#context">Context</NavLink>
+              <NavLink href="#vision">Vision</NavLink>
+              <NavLink href="#values">Values</NavLink>
+              <NavLink href="#coherence">Coherence</NavLink>
             </div>
 
             {/* Mobile Menu Button */}
@@ -48,10 +48,10 @@ const Index = () => {
           {isMenuOpen && (
             <div className="md:hidden py-4 animate-fade-in">
               <div className="flex flex-col space-y-4">
-                <NavLink href="#courses">Courses</NavLink>
-                <NavLink href="#about">About</NavLink>
-                <NavLink href="#categories">Categories</NavLink>
-                <NavLink href="#contact">Contact</NavLink>
+                <NavLink href="#context">Context</NavLink>
+                <NavLink href="#vision">Vision</NavLink>
+                <NavLink href="#values">Values</NavLink>
+                <NavLink href="#coherence">Coherence</NavLink>
               </div>
             </div>
           )}
@@ -62,83 +62,114 @@ const Index = () => {
       <section className="pt-32 pb-20 container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center animate-fade-up">
           <h1 className="font-playfair text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-foreground mb-6">
-            Elevate Your Learning Journey
+            Understanding Brand Strategy
           </h1>
           <p className="font-inter text-lg md:text-xl text-muted-foreground mb-8">
-            Discover curated educational content designed to inspire and empower your growth.
+            Learn about the key components of successful brand strategy: Context, Vision, Purpose, Values, and Coherence.
           </p>
-          <button className="bg-primary hover:bg-primary-hover text-white font-inter font-medium px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105">
-            Explore Courses
-          </button>
         </div>
       </section>
 
-      {/* Featured Courses */}
-      <section id="courses" className="py-20 bg-secondary">
+      {/* Context Section */}
+      <section id="context" className="py-20 bg-secondary">
         <div className="container mx-auto px-4">
           <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-12 animate-fade-up">
-            Featured Courses
+            Brand Context
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 animate-fade-up"
-                style={{ animationDelay: `${i * 100}ms` }}
-              >
-                <img
-                  src={`https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80`}
-                  alt="Course thumbnail"
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <span className="text-primary text-sm font-inter font-medium">BEGINNER</span>
-                  <h3 className="font-playfair text-xl font-bold mt-2 mb-3">Introduction to Digital Learning</h3>
-                  <p className="text-muted-foreground font-inter">
-                    Master the fundamentals of digital education and online learning strategies.
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-6 animate-fade-up">
-              Our Mission
-            </h2>
+          <div className="max-w-3xl mx-auto">
             <p className="font-inter text-muted-foreground leading-relaxed mb-8 animate-fade-up">
-              We believe in the power of education to transform lives. Our platform provides
-              carefully curated content that empowers learners to achieve their goals and unlock
-              their full potential.
+              When communicating any brand's values, it is crucial to consider the context around it. This context gives insights into the opportunities and challenges surrounding the brand, guiding strategic decision-making, and ensuring alignment with industry trends and consumer expectations.
             </p>
+            <div className="bg-white p-6 rounded-lg shadow-sm animate-fade-up">
+              <h3 className="font-playfair text-xl font-bold mb-4">Brand Audit</h3>
+              <p className="font-inter text-muted-foreground">
+                Once we have finished the brand audit and we understand the context where the brand is framed, it's time to create the brand strategy. At this point, a key aspect is to consider whether we are creating a brand from scratch or repositioning an existing one.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Categories */}
-      <section id="categories" className="py-20 bg-secondary">
+      {/* Vision Section */}
+      <section id="vision" className="py-20">
         <div className="container mx-auto px-4">
           <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-12 animate-fade-up">
-            Categories
+            Vision & Purpose
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {["Technology", "Business", "Design", "Science"].map((category, i) => (
-              <div
-                key={category}
-                className="bg-white p-6 rounded-lg text-center hover:shadow-md transition-shadow duration-200 animate-fade-up cursor-pointer"
-                style={{ animationDelay: `${i * 100}ms` }}
-              >
-                <h3 className="font-playfair font-bold text-lg mb-2">{category}</h3>
-                <p className="font-inter text-sm text-muted-foreground">
-                  Explore {category.toLowerCase()} courses
-                </p>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="animate-fade-up">
+              <h3 className="font-playfair text-2xl font-bold mb-4">Vision</h3>
+              <ul className="space-y-4 font-inter text-muted-foreground">
+                <li>• Inspiration and motivation for stakeholders</li>
+                <li>• Clarity in communication</li>
+                <li>• Long-term orientation</li>
+                <li>• Ambition and relevance</li>
+                <li>• Adaptability to change</li>
+              </ul>
+            </div>
+            <div className="animate-fade-up">
+              <h3 className="font-playfair text-2xl font-bold mb-4">Purpose</h3>
+              <ul className="space-y-4 font-inter text-muted-foreground">
+                <li>• Alignment with company vision</li>
+                <li>• Positive impact focus</li>
+                <li>• Stakeholder consideration</li>
+                <li>• Inspiration and motivation</li>
+                <li>• Long-term orientation</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Values Section */}
+      <section id="values" className="py-20 bg-secondary">
+        <div className="container mx-auto px-4">
+          <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-12 animate-fade-up">
+            Brand Values
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-sm animate-fade-up">
+              <h3 className="font-playfair text-xl font-bold mb-4">Basic Values</h3>
+              <p className="font-inter text-muted-foreground">
+                Values that all the brands of a certain category would need to be competitive in the market.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm animate-fade-up">
+              <h3 className="font-playfair text-xl font-bold mb-4">Valued Values</h3>
+              <p className="font-inter text-muted-foreground">
+                Values that are most appreciated by stakeholders, which can be our own or shared with other competitors.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm animate-fade-up">
+              <h3 className="font-playfair text-xl font-bold mb-4">Differential Values</h3>
+              <p className="font-inter text-muted-foreground">
+                Values that really identify and make a brand relevant compared to others. They should contribute to achieving a desired reputation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Coherence Section */}
+      <section id="coherence" className="py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-12 animate-fade-up">
+            Coherence & Consistency
+          </h2>
+          <div className="max-w-3xl mx-auto">
+            <div className="space-y-6">
+              <p className="font-inter text-muted-foreground leading-relaxed animate-fade-up">
+                Coherence and consistency are essential principles in brand strategy as they ensure alignment and effectiveness in communicating a brand's identity, values, and promises to its target audience.
+              </p>
+              <ul className="space-y-4 font-inter text-muted-foreground animate-fade-up">
+                <li>• Clear Brand Identity</li>
+                <li>• Integrated Messaging</li>
+                <li>• Brand Guidelines Consistency</li>
+                <li>• Customer Experience</li>
+                <li>• Employee Alignment</li>
+                <li>• Adaptability and Flexibility</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -148,39 +179,39 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="font-playfair font-bold text-lg mb-4">EduContent</h3>
+              <h3 className="font-playfair font-bold text-lg mb-4">Brand Strategy</h3>
               <p className="font-inter text-sm text-muted-foreground">
-                Empowering learners worldwide with quality educational content.
+                Understanding and implementing effective brand strategies.
               </p>
             </div>
             <div>
               <h4 className="font-playfair font-bold mb-4">Quick Links</h4>
               <ul className="font-inter text-sm space-y-2">
-                <li><a href="#courses" className="text-muted-foreground hover:text-primary transition-colors">Courses</a></li>
-                <li><a href="#about" className="text-muted-foreground hover:text-primary transition-colors">About</a></li>
-                <li><a href="#categories" className="text-muted-foreground hover:text-primary transition-colors">Categories</a></li>
+                <li><a href="#context" className="text-muted-foreground hover:text-primary transition-colors">Context</a></li>
+                <li><a href="#vision" className="text-muted-foreground hover:text-primary transition-colors">Vision</a></li>
+                <li><a href="#values" className="text-muted-foreground hover:text-primary transition-colors">Values</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-playfair font-bold mb-4">Support</h4>
               <ul className="font-inter text-sm space-y-2">
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Help Center</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Contact Us</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Resources</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Contact</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">About</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-playfair font-bold mb-4">Connect</h4>
               <ul className="font-inter text-sm space-y-2">
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Twitter</a></li>
                 <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">LinkedIn</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Instagram</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Twitter</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Email</a></li>
               </ul>
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-gray-100 text-center">
             <p className="font-inter text-sm text-muted-foreground">
-              © 2024 EduContent. All rights reserved.
+              © 2024 Brand Strategy. All rights reserved.
             </p>
           </div>
         </div>
