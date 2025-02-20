@@ -1,12 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from "sonner";
+import jsPDF from 'jspdf';
 
 const STORAGE_KEY = 'brand_strategy_exercise_answer';
 
 const ExerciseForm = () => {
   const [answer, setAnswer] = useState('');
   const maxCharacters = 1500;
+  const questionTitle = "Now that you have learned about brand strategy, what values would you implement in your organization?";
 
   // Load saved answer from localStorage on component mount
   useEffect(() => {
@@ -44,6 +46,35 @@ const ExerciseForm = () => {
     }
   };
 
+  const handleDownloadPDF = () => {
+    try {
+      const doc = new jsPDF();
+      
+      // Add title
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      
+      // Split title into multiple lines if needed
+      const splitTitle = doc.splitTextToSize(questionTitle, 180);
+      doc.text(splitTitle, 15, 20);
+      
+      // Add answer
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      
+      // Split answer into multiple lines
+      const splitAnswer = doc.splitTextToSize(answer || "No answer provided", 180);
+      doc.text(splitAnswer, 15, 40);
+      
+      // Save the PDF
+      doc.save('brand-strategy-exercise.pdf');
+      toast.success("PDF downloaded successfully!");
+    } catch (error) {
+      toast.error("Error generating PDF. Please try again.");
+      console.error('Error generating PDF:', error);
+    }
+  };
+
   return (
     <div className="w-full max-w-3xl mx-auto">
       <div className="flex items-start gap-4 mb-4">
@@ -53,7 +84,7 @@ const ExerciseForm = () => {
           </svg>
         </div>
         <h3 className="font-playfair text-xl font-bold text-secondary-foreground">
-          Now that you have learned about brand strategy, what values would you implement in your organization?
+          {questionTitle}
         </h3>
       </div>
       
@@ -78,6 +109,13 @@ const ExerciseForm = () => {
             className="px-6 py-2 border border-gray-200 rounded-md font-inter text-secondary-foreground hover:bg-gray-50 transition-colors"
           >
             Reset
+          </button>
+          <button
+            type="button"
+            onClick={handleDownloadPDF}
+            className="px-6 py-2 border border-gray-200 rounded-md font-inter text-secondary-foreground hover:bg-gray-50 transition-colors"
+          >
+            Download PDF
           </button>
           <button
             type="submit"
