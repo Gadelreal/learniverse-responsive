@@ -1,18 +1,47 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { toast } from "sonner";
+
+const STORAGE_KEY = 'brand_strategy_exercise_answer';
 
 const ExerciseForm = () => {
   const [answer, setAnswer] = useState('');
   const maxCharacters = 1500;
 
+  // Load saved answer from localStorage on component mount
+  useEffect(() => {
+    const savedAnswer = localStorage.getItem(STORAGE_KEY);
+    if (savedAnswer) {
+      setAnswer(savedAnswer);
+    }
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle submission logic here
-    console.log('Submitted answer:', answer);
+    try {
+      localStorage.setItem(STORAGE_KEY, answer);
+      toast.success("Your answer has been saved successfully!");
+    } catch (error) {
+      toast.error("There was an error saving your answer. Please try again.");
+      console.error('Error saving to localStorage:', error);
+    }
   };
 
   const handleReset = () => {
     setAnswer('');
+    localStorage.removeItem(STORAGE_KEY);
+    toast.info("Your answer has been reset.");
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newAnswer = e.target.value;
+    setAnswer(newAnswer);
+    // Optionally auto-save as user types
+    try {
+      localStorage.setItem(STORAGE_KEY, newAnswer);
+    } catch (error) {
+      console.error('Error auto-saving to localStorage:', error);
+    }
   };
 
   return (
@@ -32,7 +61,7 @@ const ExerciseForm = () => {
         <div className="relative">
           <textarea
             value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
+            onChange={handleChange}
             placeholder="Write here your answer"
             className="w-full min-h-[200px] p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 font-inter text-secondary-foreground resize-none"
             maxLength={maxCharacters}
