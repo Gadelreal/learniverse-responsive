@@ -1,22 +1,15 @@
-
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import VideoPlayer from "../components/VideoPlayer";
 import ExerciseForm from "../components/ExerciseForm";
-
 const Index = () => {
-  return (
-    <div className="min-h-screen bg-white">
+  return <div className="min-h-screen bg-white">
       <Navigation />
 
       {/* Hero Section with Background Image */}
       <section className="relative min-h-screen flex items-center justify-center bg-white overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img
-            src="/placeholder.svg"
-            alt="Background"
-            className="w-full h-full object-cover opacity-90"
-          />
+          <img src="/placeholder.svg" alt="Background" className="w-full h-full object-cover opacity-90" />
           <div className="absolute inset-0 bg-gradient-to-b from-white/0 to-white"></div>
         </div>
         <div className="relative z-10 container mx-auto px-4 text-center">
@@ -26,10 +19,7 @@ const Index = () => {
           <p className="font-inter text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-12 animate-fade-up">
             When communicating any brand's values, it is crucial to consider the context around it. This context gives insights into the opportunities and challenges surrounding the brand, guiding strategic decision-making, and ensuring alignment with industry trends and consumer expectations.
           </p>
-          <a 
-            href="#context" 
-            className="inline-flex items-center justify-center px-8 py-4 bg-primary text-white rounded-md font-inter text-lg hover:bg-primary/90 transition-colors animate-fade-up"
-          >
+          <a href="#context" className="inline-flex items-center justify-center px-8 py-4 bg-primary text-white rounded-md font-inter text-lg hover:bg-primary/90 transition-colors animate-fade-up">
             Explore More
           </a>
         </div>
@@ -45,10 +35,7 @@ const Index = () => {
             <p className="font-inter text-gray-600 leading-relaxed mb-12 animate-fade-up">
               Watch the following video where the professor explains the key components you need to consider in the context of a brand.
             </p>
-            <VideoPlayer 
-              title="Brand Audit: What Is Happening Around?"
-              src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-            />
+            <VideoPlayer title="Brand Audit: What Is Happening Around?" src="https://www.youtube.com/embed/YOUR_VIDEO_ID" />
             <div className="bg-gray-50 p-8 rounded-lg mt-12 animate-fade-up shadow-sm">
               <h3 className="font-playfair text-2xl font-bold mb-4 text-gray-900">Brand Strategy</h3>
               <p className="font-inter text-gray-600">
@@ -132,9 +119,8 @@ const Index = () => {
       {/* Coherence Section */}
       <section id="coherence" className="py-32 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900 animate-fade-up">
-            Coherence & Consistency: From a Strategic Decision to the Final Implementation
-          </h2>
+          <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900 animate-fade-up">Coherence & Consistency: 
+ From a Strategic Decision to the Final Implementation</h2>
           <div className="max-w-3xl mx-auto">
             <div className="space-y-6">
               <p className="font-inter text-gray-600 leading-relaxed animate-fade-up">
@@ -166,8 +152,6 @@ const Index = () => {
       </section>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
