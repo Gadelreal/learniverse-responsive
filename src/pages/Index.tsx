@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import VideoPlayer from "../components/VideoPlayer";
+import ExerciseForm from "../components/ExerciseForm";
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <a
@@ -181,6 +182,16 @@ const Index = () => {
               </ul>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Exercise Section */}
+      <section className="py-20 bg-secondary">
+        <div className="container mx-auto px-4">
+          <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-12 animate-fade-up">
+            Practice Exercise
+          </h2>
+          <ExerciseForm />
         </div>
       </section>
 
