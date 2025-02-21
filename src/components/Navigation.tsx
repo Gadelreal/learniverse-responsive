@@ -35,7 +35,7 @@ const Navigation = () => {
               <img 
                 src="/lovable-uploads/a65b86fa-abf3-42aa-893d-b0b6c25b9f0e.png"
                 alt="IE University"
-                className="h-8 w-auto"
+                className="w-auto"
               />
             </a>
             <div className="h-6 w-px bg-gray-300"></div>
