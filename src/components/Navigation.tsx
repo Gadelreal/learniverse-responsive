@@ -12,7 +12,7 @@ const NavLink = ({
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  return <nav className="fixed w-full backdrop-blur-sm z-50 border-b border-gray-100 rounded-2xl mx-0 my-0 py-[24px] px-0 bg-slate-50">
+  return <nav className="fixed w-full backdrop-blur-sm z-50 border-b border-gray-100 mx-0 my-0 py-[24px] px-0 bg-slate-50 rounded-none">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-4">
