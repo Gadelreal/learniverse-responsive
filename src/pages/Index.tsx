@@ -1,7 +1,9 @@
+
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import VideoPlayer from "../components/VideoPlayer";
 import ExerciseForm from "../components/ExerciseForm";
+
 const Index = () => {
   return <div className="min-h-screen bg-white">
       <Navigation />
@@ -9,8 +11,8 @@ const Index = () => {
       {/* Hero Section with Background Image */}
       <section className="relative min-h-screen flex items-center justify-center bg-white overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src="/placeholder.svg" alt="Background" className="w-full h-full object-cover opacity-90" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/0 to-white"></div>
+          <img src="/lovable-uploads/cc6e1f8b-fd0d-41c3-9bf5-1ab95736be0a.png" alt="A minimalist white background with diagonal lines" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white"></div>
         </div>
         <div className="relative z-10 container mx-auto px-4 text-center">
           <h1 className="font-playfair text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-8 animate-fade-up">
@@ -154,4 +156,5 @@ const Index = () => {
       <Footer />
     </div>;
 };
+
 export default Index;
