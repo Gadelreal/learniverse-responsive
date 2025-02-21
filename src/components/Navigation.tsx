@@ -14,7 +14,7 @@ const Navigation = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   return <nav className="fixed w-full backdrop-blur-sm z-50 border-b border-gray-100 mx-0 my-0 py-[24px] px-0 bg-slate-50 rounded-none">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-full backdrop-between h-16 mx-0">
           <div className="flex items-center space-x-4">
             <a href="https://www.ie.edu" target="_blank" rel="noopener noreferrer" className="flex items-center">
               <img src="/lovable-uploads/a65b86fa-abf3-42aa-893d-b0b6c25b9f0e.png" alt="IE University" className="w-auto" />
