@@ -38,7 +38,7 @@ const Navigation = () => {
         ? 'py-2 bg-white/80 backdrop-blur-md shadow-sm' 
         : 'py-6 bg-transparent'
     }`}>
-      <div className="container mx-auto px-4">
+      <div className="max-w-full px-6 md:px-12 mx-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <a 
