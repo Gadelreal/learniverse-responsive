@@ -214,14 +214,18 @@ const Index = () => {
                 >
                   <CarouselContent className="-ml-2 md:-ml-4">
                     {BrandStrategyCards.map((card, index) => (
-                      <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                        <div className="p-1">
-                          <Card className="bg-white border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
-                            <CardContent className="p-6">
+                      <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
+                        <div className="p-1 h-full">
+                          <Card className="bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-[400px] flex flex-col">
+                            <CardContent className="p-8 flex flex-col h-full">
+                              <div className="mb-6 text-primary text-4xl font-bold font-playfair">
+                                {String(index + 1).padStart(2, '0')}
+                              </div>
                               <h3 className="font-playfair text-xl font-bold mb-4 text-gray-900">
                                 {card.title}
                               </h3>
-                              <p className="font-inter text-gray-600 text-sm">
+                              <div className="w-12 h-1 bg-primary mb-6"></div>
+                              <p className="font-inter text-gray-600 text-sm leading-relaxed flex-grow">
                                 {card.description}
                               </p>
                             </CardContent>
