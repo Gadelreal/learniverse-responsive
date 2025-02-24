@@ -3,6 +3,7 @@ import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import ExerciseForm from "../components/ExerciseForm";
 import ChannelsExercise from "../components/ChannelsExercise";
+import DownloadSection from "../components/DownloadSection";
 import { useEffect } from "react";
 import HeroSection from "../components/sections/HeroSection";
 import ContextSection from "../components/sections/ContextSection";
@@ -60,6 +61,11 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Download Section */}
+      <div className="opacity-0 translate-y-10 scroll-animate">
+        <DownloadSection />
+      </div>
 
       <Footer />
     </div>
