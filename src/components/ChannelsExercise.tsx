@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from "sonner";
+import { Card } from "./ui/card";
 
 const STORAGE_KEY = 'ilunion_channels_exercise_answers';
 
@@ -58,23 +59,25 @@ const ChannelsExercise = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <h2 className="font-playfair text-4xl md:text-5xl font-bold text-center mb-8 text-gray-900">
-        How ILUNION Hotels Uses Its Channels
-      </h2>
-      
-      <p className="font-inter text-gray-600 mb-12 text-lg">
-        Now that you are familiar with the structure of ILUNION Hotels' communication channels, we invite you to complete the following activity.
-      </p>
-      
-      <p className="font-inter text-gray-600 mb-8">
-        We are providing different messages that the company has disseminated via its different channels, and your task is to analyze these messages and match them with the right channels through which they were published.
-      </p>
+    <Card className="w-full max-w-4xl mx-auto p-8 bg-white shadow-sm">
+      <div className="mb-12">
+        <h2 className="font-playfair text-4xl font-bold mb-8 text-gray-900">
+          Uses Its Channels
+        </h2>
+        
+        <p className="font-inter text-gray-600 mb-8 text-lg">
+          Now that you are familiar with the structure of ILUNION Hotels' communication channels, we invite you to complete the following activity.
+        </p>
+        
+        <p className="font-inter text-gray-600 mb-12">
+          We are providing different messages that the company has disseminated via its different channels, and your task is to analyze these messages and match them with the right channels through which they were published.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6">
         {messages.map((message, index) => (
-          <div key={index} className="flex flex-col md:flex-row md:items-center gap-4 p-6 bg-gray-50 rounded-lg">
-            <p className="flex-grow font-inter text-secondary-foreground">
+          <div key={index} className="flex flex-col md:flex-row md:items-start gap-6 py-6 border-t border-gray-100 last:border-b">
+            <p className="flex-grow font-inter text-gray-600 text-sm leading-relaxed">
               {message}
             </p>
             <select
@@ -84,7 +87,7 @@ const ChannelsExercise = () => {
                 newAnswers[index] = e.target.value;
                 setAnswers(newAnswers);
               }}
-              className="w-full md:w-64 p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white"
+              className="w-full md:w-48 p-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white text-gray-600 font-inter"
             >
               <option value="">Select a channel</option>
               {channelOptions.map((channel) => (
@@ -96,17 +99,17 @@ const ChannelsExercise = () => {
           </div>
         ))}
 
-        <div className="flex justify-end gap-4 mt-8">
+        <div className="flex justify-end gap-4 mt-8 pt-6">
           <button
             type="button"
             onClick={handleReset}
-            className="px-6 py-2 border border-gray-200 rounded-md font-inter text-secondary-foreground hover:bg-gray-50 transition-colors"
+            className="px-6 py-2 border border-gray-200 rounded-md font-inter text-sm text-gray-600 hover:bg-gray-50 transition-colors"
           >
             Reset
           </button>
           <button
             type="submit"
-            className="px-6 py-2 bg-primary text-white rounded-md font-inter hover:bg-primary-hover transition-colors"
+            className="px-6 py-2 bg-primary text-white rounded-md font-inter text-sm hover:bg-primary-hover transition-colors"
           >
             Submit
           </button>
@@ -114,15 +117,15 @@ const ChannelsExercise = () => {
       </form>
 
       {showFeedback && (
-        <div className="mt-12 p-6 bg-gray-50 rounded-lg animate-fade-up">
-          <p className="font-inter text-gray-600 leading-relaxed">
+        <div className="mt-12 pt-8 border-t border-gray-100">
+          <p className="font-inter text-sm text-gray-600 leading-relaxed">
             Thank you for reviewing all the messages and matching them with the different channels in ILUNION Hotels' structure. 
             Remember, while these messages were tailored for specific channels, there are no wrong answers. Many of these messages can also be adapted and reused across different platforms if they align with the communication strategy guidelines. 
             By following these guidelines, consistency and coherence will be ensured in any brand's messaging, enhancing its impact and reach.
           </p>
         </div>
       )}
-    </div>
+    </Card>
   );
 };
 
