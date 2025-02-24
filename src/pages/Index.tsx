@@ -3,6 +3,7 @@ import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import VideoPlayer from "../components/VideoPlayer";
 import ExerciseForm from "../components/ExerciseForm";
+import ChannelsExercise from "../components/ChannelsExercise";
 import { useEffect } from "react";
 import {
   Carousel,
@@ -252,6 +253,15 @@ const Index = () => {
             Practice Exercise
           </h2>
           <ExerciseForm />
+        </div>
+      </section>
+
+      {/* Channels Exercise Section */}
+      <section className="py-32 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="opacity-0 translate-y-10 scroll-animate">
+            <ChannelsExercise />
+          </div>
         </div>
       </section>
 
