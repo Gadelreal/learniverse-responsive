@@ -13,7 +13,7 @@ const ContextSection = () => {
           <p className="font-inter text-gray-600 leading-relaxed mb-12 opacity-0 translate-y-10 scroll-animate">
             Watch the following video where the professor explains the key components you need to consider in the context of a brand.
           </p>
-          <VideoPlayer title="Brand Audit: What Is Happening Around?" src="https://www.youtube.com/embed/YOUR_VIDEO_ID" />
+          <VideoPlayer title="Brand Audit: What Is Happening Around?" src="https://www.youtube.com/embed/1Y8_RPUc8n8" />
           <div className="bg-gray-50 p-8 rounded-lg mt-12 opacity-0 translate-y-10 scroll-animate shadow-sm">
             <h3 className="font-playfair text-2xl font-bold mb-4 text-gray-900">Brand Strategy</h3>
             <p className="font-inter text-gray-600">
