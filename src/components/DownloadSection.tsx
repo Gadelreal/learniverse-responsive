@@ -4,6 +4,18 @@ import { Card } from "./ui/card";
 import jsPDF from 'jspdf';
 import { toast } from "sonner";
 
+const messages = [
+  "You will never be given a dream without also giving yourself the power to make it come true.",
+  "You are the protagonists because you are the essence of this organisation, and you are the ones who make people change and look at the world with different eyes.",
+  "ILUNION Hotels presents its new claim: 'Where sleeping is an awakening'.",
+  "We are much more than hotels. We are leaders in accessibility and social inclusion. #WhereSleepingIsanAwakening",
+  "Did you know that when you sleep in an ILUNION hotel, many things that were dormant awaken in you?",
+  "As the most accessible and inclusive hotel chain in the world, ILUNION Hotels has just reopened its holiday establishments. A place where you will find a unique model in the world.",
+  "Welcome to a different world",
+  "Awaken your power to take care of our home and those who live in it.",
+  "Awaken your power to shape diversity into a more inclusive and supportive world."
+];
+
 const DownloadSection = () => {
   const handleDownload = () => {
     try {
