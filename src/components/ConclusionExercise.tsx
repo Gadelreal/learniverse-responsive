@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
@@ -16,6 +17,28 @@ interface ChatMessage {
   timestamp: string;
 }
 
+// Context information about the course content
+const getCourseContext = (isSpanish: boolean) => {
+  return isSpanish ? 
+    `Este módulo trata sobre estrategia de marca y cubre los siguientes temas principales:
+    1. Contexto de la marca: Análisis del entorno competitivo, posicionamiento actual y público objetivo.
+    2. Visión de marca: Definición de la visión a largo plazo, propósito y misión de la marca.
+    3. Valores de marca: Identificación de los valores fundamentales que definen la personalidad de la marca.
+    4. Coherencia de marca: Asegurar la consistencia en todos los puntos de contacto con el cliente.
+    5. Canales de comunicación: Selección de canales adecuados para transmitir el mensaje de marca.
+    
+    Los estudiantes han trabajado en ejercicios prácticos sobre definición de valores de marca y selección de canales apropiados.` : 
+    
+    `This module is about brand strategy and covers the following main topics:
+    1. Brand Context: Analysis of competitive environment, current positioning, and target audience.
+    2. Brand Vision: Definition of long-term vision, purpose, and mission of the brand.
+    3. Brand Values: Identification of core values that define the brand's personality.
+    4. Brand Coherence: Ensuring consistency across all customer touchpoints.
+    5. Communication Channels: Selection of appropriate channels to convey the brand message.
+    
+    Students have worked on practical exercises regarding brand value definition and appropriate channel selection.`;
+};
+
 const ConclusionExercise = () => {
   const [conclusion, setConclusion] = useState('');
   const [chatInput, setChatInput] = useState('');
@@ -24,6 +47,7 @@ const ConclusionExercise = () => {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const isSpanish = location.pathname.includes('/es');
+  const courseContext = getCourseContext(isSpanish);
 
   // Load saved data on component mount
   useEffect(() => {
@@ -95,7 +119,7 @@ const ConclusionExercise = () => {
     try {
       // Simulate API call to ChatGPT
       setTimeout(() => {
-        // This is a placeholder for real ChatGPT integration
+        // Including context from user's conclusion and course content
         const aiResponse = getSimulatedResponse(chatInput, conclusion);
         const assistantMessage: ChatMessage = {
           role: 'assistant',
@@ -146,7 +170,7 @@ const ConclusionExercise = () => {
     setIsLoading(true);
     
     try {
-      // Simulate API call to ChatGPT
+      // Simulate API call to ChatGPT with context
       setTimeout(() => {
         const aiResponse = getSimulatedFeedbackResponse(conclusion);
         const assistantMessage: ChatMessage = {
@@ -257,24 +281,27 @@ const ConclusionExercise = () => {
       : "Data has been reset successfully.");
   };
 
+  // Enhanced simulated responses that take into account the course context
   const getSimulatedResponse = (message: string, userConclusion: string): string => {
+    // Include course context in the consideration
     if (message.toLowerCase().includes('help') || message.toLowerCase().includes('ayuda')) {
       return isSpanish
-        ? "Estoy aquí para ayudarte a reflexionar sobre tus conclusiones. ¿En qué puedo asistirte específicamente?"
-        : "I'm here to help you reflect on your conclusions. How can I assist you specifically?";
+        ? `Estoy aquí para ayudarte a reflexionar sobre tus conclusiones relacionadas con la estrategia de marca. Basándome en el contenido del módulo sobre contexto de marca, visión, valores, coherencia y canales de comunicación, ¿en qué aspecto específico necesitas ayuda?`
+        : `I'm here to help you reflect on your conclusions about brand strategy. Based on the module content about brand context, vision, values, coherence, and communication channels, what specific aspect do you need help with?`;
     }
     
     if (message.toLowerCase().includes('explain') || message.toLowerCase().includes('explica')) {
       return isSpanish
-        ? "Basándome en tu conclusión, parece que tienes algunos puntos interesantes sobre estrategia de marca. ¿Te gustaría profundizar en algún aspecto particular?"
-        : "Based on your conclusion, you seem to have some interesting points about brand strategy. Would you like to explore any particular aspect in more depth?";
+        ? `Analizando tu conclusión sobre estrategia de marca, observo que has tocado temas relacionados con ${userConclusion.length > 30 ? 'varios aspectos del curso' : 'estrategia de marca'}. Recuerda que una estrategia de marca efectiva integra el contexto competitivo, una visión clara, valores definidos, coherencia en todos los puntos de contacto y la selección adecuada de canales. ¿Te gustaría profundizar en alguno de estos elementos específicos?`
+        : `Analyzing your conclusion about brand strategy, I notice you've touched on topics related to ${userConclusion.length > 30 ? 'several aspects of the course' : 'brand strategy'}. Remember that an effective brand strategy integrates competitive context, a clear vision, defined values, coherence across all touchpoints, and proper channel selection. Would you like to explore any of these specific elements further?`;
     }
     
     return isSpanish
-      ? "Gracias por compartir tus pensamientos. La coherencia y consistencia en la estrategia de marca son fundamentales para construir una identidad sólida. ¿Hay algún aspecto específico sobre el que quieras profundizar?"
-      : "Thank you for sharing your thoughts. Coherence and consistency in brand strategy are essential for building a strong identity. Is there any specific aspect you'd like to explore further?";
+      ? `Gracias por compartir tus pensamientos sobre estrategia de marca. Para construir una identidad sólida, es fundamental integrar los cinco pilares que hemos estudiado: contexto (análisis competitivo y público objetivo), visión (propósito y misión), valores (personalidad de marca), coherencia (consistencia en todos los puntos de contacto) y selección de canales adecuados. ¿Hay alguno de estos aspectos sobre el que quieras profundizar en particular?`
+      : `Thank you for sharing your thoughts on brand strategy. To build a strong identity, it's essential to integrate the five pillars we've studied: context (competitive analysis and target audience), vision (purpose and mission), values (brand personality), coherence (consistency across all touchpoints), and appropriate channel selection. Is there any of these aspects you would like to explore further?`;
   };
 
+  // Enhanced feedback response that incorporates course context
   const getSimulatedFeedbackResponse = (userConclusion: string): string => {
     if (!userConclusion.trim()) {
       return isSpanish
@@ -282,9 +309,91 @@ const ConclusionExercise = () => {
         : "I don't see a conclusion in your message. Could you share your conclusion so I can provide feedback?";
     }
     
-    return isSpanish
-      ? "Gracias por compartir tu conclusión. Has presentado algunos puntos interesantes sobre la estrategia de marca. Me gusta especialmente cómo has considerado la coherencia entre los valores de la marca y su comunicación. Para fortalecer aún más tu conclusión, podrías considerar añadir ejemplos específicos o casos de estudio que ilustren tus puntos. También podrías reflexionar sobre cómo estos principios de marca podrían aplicarse en diferentes contextos o industrias. ¿Hay algún aspecto específico de tu conclusión sobre el que te gustaría profundizar?"
-      : "Thank you for sharing your conclusion. You've presented some interesting points about brand strategy. I particularly like how you've considered the coherence between brand values and communication. To strengthen your conclusion further, you might consider adding specific examples or case studies that illustrate your points. You could also reflect on how these branding principles might apply in different contexts or industries. Is there any specific aspect of your conclusion you'd like to explore further?";
+    // Analysis of the conclusion length to provide more personalized feedback
+    const isBrief = userConclusion.length < 100;
+    const isMedium = userConclusion.length >= 100 && userConclusion.length < 300;
+    const isDetailed = userConclusion.length >= 300;
+    
+    // Check for keywords to determine which aspects of brand strategy are covered
+    const mentionsContext = userConclusion.toLowerCase().includes('context') || userConclusion.toLowerCase().includes('contexto');
+    const mentionsVision = userConclusion.toLowerCase().includes('vision') || userConclusion.toLowerCase().includes('visión');
+    const mentionsValues = userConclusion.toLowerCase().includes('values') || userConclusion.toLowerCase().includes('valores');
+    const mentionsCoherence = userConclusion.toLowerCase().includes('coherence') || userConclusion.toLowerCase().includes('coherencia');
+    const mentionsChannels = userConclusion.toLowerCase().includes('channel') || userConclusion.toLowerCase().includes('canal');
+    
+    let feedback = '';
+    
+    if (isSpanish) {
+      feedback = "Gracias por compartir tu conclusión sobre estrategia de marca. ";
+      
+      if (isBrief) {
+        feedback += "Tu conclusión es concisa, lo cual puede ser efectivo para comunicar ideas clave. Sin embargo, podría beneficiarse de mayor elaboración. ";
+      } else if (isDetailed) {
+        feedback += "Has desarrollado una conclusión muy detallada, lo que demuestra una reflexión profunda. ";
+      }
+      
+      // Feedback based on content coverage
+      if (mentionsContext && mentionsVision && mentionsValues && mentionsCoherence && mentionsChannels) {
+        feedback += "Has abordado los cinco pilares fundamentales de la estrategia de marca que se discutieron en el módulo: contexto, visión, valores, coherencia y canales de comunicación. Esto demuestra una comprensión integral del tema. ";
+      } else {
+        feedback += "En tu conclusión, ";
+        
+        if (mentionsContext) feedback += "has abordado el análisis de contexto de marca, que es fundamental para entender el entorno competitivo. ";
+        if (mentionsVision) feedback += "has incluido la importancia de la visión de marca, esencial para establecer el propósito y dirección. ";
+        if (mentionsValues) feedback += "has reconocido el papel de los valores en la definición de la personalidad de la marca. ";
+        if (mentionsCoherence) feedback += "has señalado la importancia de la coherencia en todos los puntos de contacto con el cliente. ";
+        if (mentionsChannels) feedback += "has mencionado la selección de canales adecuados para transmitir el mensaje de marca. ";
+        
+        const missingElements = [];
+        if (!mentionsContext) missingElements.push("contexto de marca");
+        if (!mentionsVision) missingElements.push("visión de marca");
+        if (!mentionsValues) missingElements.push("valores de marca");
+        if (!mentionsCoherence) missingElements.push("coherencia de marca");
+        if (!mentionsChannels) missingElements.push("canales de comunicación");
+        
+        if (missingElements.length > 0) {
+          feedback += `Podrías considerar expandir tu análisis para incluir también ${missingElements.join(', ')}, lo que proporcionaría una perspectiva más completa de la estrategia de marca. `;
+        }
+      }
+      
+      feedback += "Para fortalecer aún más tu conclusión, considera incluir ejemplos específicos o casos de estudio que ilustren los principios de estrategia de marca que has mencionado. También podrías reflexionar sobre cómo estos principios se aplican en diferentes contextos o industrias. ¿Hay algún aspecto específico de tu conclusión sobre el que te gustaría profundizar?";
+    } else {
+      feedback = "Thank you for sharing your conclusion about brand strategy. ";
+      
+      if (isBrief) {
+        feedback += "Your conclusion is concise, which can be effective for communicating key ideas. However, it might benefit from further elaboration. ";
+      } else if (isDetailed) {
+        feedback += "You've developed a very detailed conclusion, showing deep reflection. ";
+      }
+      
+      // Feedback based on content coverage
+      if (mentionsContext && mentionsVision && mentionsValues && mentionsCoherence && mentionsChannels) {
+        feedback += "You've addressed all five fundamental pillars of brand strategy discussed in the module: context, vision, values, coherence, and communication channels. This demonstrates a comprehensive understanding of the topic. ";
+      } else {
+        feedback += "In your conclusion, ";
+        
+        if (mentionsContext) feedback += "you've addressed brand context analysis, which is fundamental to understanding the competitive environment. ";
+        if (mentionsVision) feedback += "you've included the importance of brand vision, essential for establishing purpose and direction. ";
+        if (mentionsValues) feedback += "you've recognized the role of values in defining brand personality. ";
+        if (mentionsCoherence) feedback += "you've pointed out the importance of coherence across all customer touchpoints. ";
+        if (mentionsChannels) feedback += "you've mentioned the selection of appropriate channels to convey the brand message. ";
+        
+        const missingElements = [];
+        if (!mentionsContext) missingElements.push("brand context");
+        if (!mentionsVision) missingElements.push("brand vision");
+        if (!mentionsValues) missingElements.push("brand values");
+        if (!mentionsCoherence) missingElements.push("brand coherence");
+        if (!mentionsChannels) missingElements.push("communication channels");
+        
+        if (missingElements.length > 0) {
+          feedback += `You might consider expanding your analysis to also include ${missingElements.join(', ')}, which would provide a more complete perspective on brand strategy. `;
+        }
+      }
+      
+      feedback += "To strengthen your conclusion further, consider including specific examples or case studies that illustrate the brand strategy principles you've mentioned. You could also reflect on how these principles apply in different contexts or industries. Is there a specific aspect of your conclusion you'd like to explore further?";
+    }
+    
+    return feedback;
   };
 
   return (
