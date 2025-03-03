@@ -3,6 +3,7 @@ import React from 'react';
 import { Card } from "./ui/card";
 import jsPDF from 'jspdf';
 import { toast } from "sonner";
+import { useLocation } from "react-router-dom";
 
 const messages = [
   "You will never be given a dream without also giving yourself the power to make it come true.",
@@ -17,22 +18,25 @@ const messages = [
 ];
 
 const DownloadSection = () => {
+  const location = useLocation();
+  const isSpanish = location.pathname.includes('/es');
+
   const handleDownload = () => {
     try {
       const doc = new jsPDF();
       
       // Get answers from local storage
-      const brandStrategyAnswer = localStorage.getItem('brand_strategy_exercise_answer') || 'No answer provided';
+      const brandStrategyAnswer = localStorage.getItem('brand_strategy_exercise_answer') || (isSpanish ? 'No se ha proporcionado respuesta' : 'No answer provided');
       const channelsAnswers = JSON.parse(localStorage.getItem('ilunion_channels_exercise_answers') || '[]');
       
       // Set up the document
       doc.setFont("helvetica", "normal");
       doc.setFontSize(20);
-      doc.text("Exercise Answers", 20, 20);
+      doc.text(isSpanish ? "Respuestas de Ejercicios" : "Exercise Answers", 20, 20);
       
       // Add brand strategy exercise
       doc.setFontSize(16);
-      doc.text("Brand Strategy Exercise", 20, 40);
+      doc.text(isSpanish ? "Ejercicio de Estrategia de Marca" : "Brand Strategy Exercise", 20, 40);
       doc.setFontSize(12);
       const brandStrategyLines = doc.splitTextToSize(brandStrategyAnswer, 170);
       doc.text(brandStrategyLines, 20, 50);
@@ -40,20 +44,26 @@ const DownloadSection = () => {
       // Add channels exercise
       const yOffset = 50 + (brandStrategyLines.length * 7);
       doc.setFontSize(16);
-      doc.text("Channels Exercise", 20, yOffset);
+      doc.text(isSpanish ? "Ejercicio de Canales" : "Channels Exercise", 20, yOffset);
       doc.setFontSize(12);
       
       channelsAnswers.forEach((answer: string, index: number) => {
         const message = messages[index];
-        const text = `Message ${index + 1}: ${answer}`;
+        const text = isSpanish 
+          ? `Mensaje ${index + 1}: ${answer}`
+          : `Message ${index + 1}: ${answer}`;
         doc.text(text, 20, yOffset + 10 + (index * 10));
       });
       
       // Save the PDF
-      doc.save('exercise-answers.pdf');
-      toast.success("PDF downloaded successfully!");
+      doc.save(isSpanish ? 'respuestas-ejercicios.pdf' : 'exercise-answers.pdf');
+      toast.success(isSpanish 
+        ? "PDF descargado correctamente." 
+        : "PDF downloaded successfully!");
     } catch (error) {
-      toast.error("Error generating PDF. Please try again.");
+      toast.error(isSpanish 
+        ? "Error al generar el PDF. Por favor, inténtalo de nuevo." 
+        : "Error generating PDF. Please try again.");
       console.error('Error generating PDF:', error);
     }
   };
@@ -81,16 +91,18 @@ const DownloadSection = () => {
             </div>
             <div className="flex-1">
               <h2 className="font-playfair text-2xl font-bold mb-4 text-gray-900">
-                Download Your Answers
+                {isSpanish ? "Descarga tus Respuestas" : "Download Your Answers"}
               </h2>
               <p className="font-inter text-gray-600 mb-8">
-                Download a PDF file containing all your answers from the exercises in this module.
+                {isSpanish 
+                  ? "Descarga un archivo PDF que contiene todas tus respuestas de los ejercicios en este módulo."
+                  : "Download a PDF file containing all your answers from the exercises in this module."}
               </p>
               <button
                 onClick={handleDownload}
                 className="inline-flex items-center justify-center px-6 py-2 border border-gray-200 rounded-md font-inter text-sm text-gray-600 hover:bg-gray-50 transition-colors"
               >
-                DOWNLOAD PDF
+                {isSpanish ? "DESCARGAR PDF" : "DOWNLOAD PDF"}
               </button>
             </div>
           </div>

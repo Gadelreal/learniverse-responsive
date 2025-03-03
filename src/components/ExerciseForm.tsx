@@ -1,11 +1,20 @@
+
 import React, { useState, useEffect } from 'react';
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
+import { useLocation } from "react-router-dom";
+
 const STORAGE_KEY = 'brand_strategy_exercise_answer';
+
 const ExerciseForm = () => {
   const [answer, setAnswer] = useState('');
   const maxCharacters = 1500;
-  const questionTitle = "Now that you have learned about brand strategy, what values would you implement in your organization?";
+  const location = useLocation();
+  const isSpanish = location.pathname.includes('/es');
+  
+  const questionTitle = isSpanish
+    ? "Ahora que has aprendido sobre estrategia de marca, ¿qué valores implementarías en tu organización?"
+    : "Now that you have learned about brand strategy, what values would you implement in your organization?";
 
   // Load saved answer from localStorage on component mount
   useEffect(() => {
@@ -14,21 +23,30 @@ const ExerciseForm = () => {
       setAnswer(savedAnswer);
     }
   }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     try {
       localStorage.setItem(STORAGE_KEY, answer);
-      toast.success("Your answer has been saved successfully!");
+      toast.success(isSpanish 
+        ? "Tu respuesta ha sido guardada correctamente." 
+        : "Your answer has been saved successfully!");
     } catch (error) {
-      toast.error("There was an error saving your answer. Please try again.");
+      toast.error(isSpanish 
+        ? "Hubo un error al guardar tu respuesta. Por favor, inténtalo de nuevo." 
+        : "There was an error saving your answer. Please try again.");
       console.error('Error saving to localStorage:', error);
     }
   };
+
   const handleReset = () => {
     setAnswer('');
     localStorage.removeItem(STORAGE_KEY);
-    toast.info("Your answer has been reset.");
+    toast.info(isSpanish 
+      ? "Tu respuesta ha sido restablecida." 
+      : "Your answer has been reset.");
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newAnswer = e.target.value;
     setAnswer(newAnswer);
@@ -39,6 +57,7 @@ const ExerciseForm = () => {
       console.error('Error auto-saving to localStorage:', error);
     }
   };
+
   const handleDownloadPDF = () => {
     try {
       const doc = new jsPDF();
@@ -56,17 +75,22 @@ const ExerciseForm = () => {
       doc.setFont("helvetica", "normal");
 
       // Split answer into multiple lines
-      const splitAnswer = doc.splitTextToSize(answer || "No answer provided", 180);
+      const splitAnswer = doc.splitTextToSize(answer || (isSpanish ? "No se ha proporcionado ninguna respuesta" : "No answer provided"), 180);
       doc.text(splitAnswer, 15, 40);
 
       // Save the PDF
       doc.save('brand-strategy-exercise.pdf');
-      toast.success("PDF downloaded successfully!");
+      toast.success(isSpanish 
+        ? "PDF descargado correctamente." 
+        : "PDF downloaded successfully!");
     } catch (error) {
-      toast.error("Error generating PDF. Please try again.");
+      toast.error(isSpanish 
+        ? "Error al generar el PDF. Por favor, inténtalo de nuevo." 
+        : "Error generating PDF. Please try again.");
       console.error('Error generating PDF:', error);
     }
   };
+
   return <div className="w-full max-w-3xl mx-auto">
       <div className="flex items-start gap-4 mb-4">
         <div className="w-8 h-8">
@@ -81,24 +105,42 @@ const ExerciseForm = () => {
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="relative">
-          <textarea value={answer} onChange={handleChange} placeholder="Write here your answer" className="w-full min-h-[200px] p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 font-inter text-secondary-foreground resize-none" maxLength={maxCharacters} />
+          <textarea 
+            value={answer} 
+            onChange={handleChange} 
+            placeholder={isSpanish ? "Escribe aquí tu respuesta" : "Write here your answer"} 
+            className="w-full min-h-[200px] p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 font-inter text-secondary-foreground resize-none" 
+            maxLength={maxCharacters} 
+          />
           <div className="absolute bottom-4 right-4 text-sm text-muted-foreground">
-            {answer.length} of {maxCharacters} characters
+            {answer.length} {isSpanish ? "de" : "of"} {maxCharacters} {isSpanish ? "caracteres" : "characters"}
           </div>
         </div>
         
         <div className="flex justify-end gap-4">
-          <button type="button" onClick={handleReset} className="px-6 py-2 border border-gray-200 rounded-md font-inter text-secondary-foreground hover:bg-gray-50 transition-colors">
-            Reset
+          <button 
+            type="button" 
+            onClick={handleReset} 
+            className="px-6 py-2 border border-gray-200 rounded-md font-inter text-secondary-foreground hover:bg-gray-50 transition-colors"
+          >
+            {isSpanish ? "Restablecer" : "Reset"}
           </button>
-          <button type="button" onClick={handleDownloadPDF} className="px-6 py-2 border border-gray-200 rounded-md font-inter text-secondary-foreground hover:bg-gray-50 transition-colors">
-            Download PDF
+          <button 
+            type="button" 
+            onClick={handleDownloadPDF} 
+            className="px-6 py-2 border border-gray-200 rounded-md font-inter text-secondary-foreground hover:bg-gray-50 transition-colors"
+          >
+            {isSpanish ? "Descargar PDF" : "Download PDF"}
           </button>
-          <button type="submit" className="px-6 py-2 text-white rounded-md font-inter transition-colors bg-gray-800 hover:bg-gray-700">
-            Submit Answer
+          <button 
+            type="submit" 
+            className="px-6 py-2 text-white rounded-md font-inter transition-colors bg-gray-800 hover:bg-gray-700"
+          >
+            {isSpanish ? "Enviar Respuesta" : "Submit Answer"}
           </button>
         </div>
       </form>
     </div>;
 };
+
 export default ExerciseForm;
