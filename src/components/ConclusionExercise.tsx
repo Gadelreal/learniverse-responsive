@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { FileText, Save, MessageSquare, Download, SendHorizonal } from "lucide-react";
+import { FileText, Save, MessageSquare, Download, SendHorizonal, RefreshCcw } from "lucide-react";
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
 import { useLocation } from "react-router-dom";
@@ -244,9 +244,20 @@ const ConclusionExercise = () => {
     }
   };
 
-  // Simulated AI response - replace with actual AI integration
+  const handleReset = () => {
+    setConclusion('');
+    setChatHistory([]);
+    setChatInput('');
+    
+    localStorage.removeItem(STORAGE_KEY_CONCLUSION);
+    localStorage.removeItem(STORAGE_KEY_CHAT);
+    
+    toast.success(isSpanish 
+      ? "Los datos han sido reiniciados correctamente."
+      : "Data has been reset successfully.");
+  };
+
   const getSimulatedResponse = (message: string, userConclusion: string): string => {
-    // Simplified response logic
     if (message.toLowerCase().includes('help') || message.toLowerCase().includes('ayuda')) {
       return isSpanish
         ? "Estoy aquí para ayudarte a reflexionar sobre tus conclusiones. ¿En qué puedo asistirte específicamente?"
@@ -259,13 +270,11 @@ const ConclusionExercise = () => {
         : "Based on your conclusion, you seem to have some interesting points about brand strategy. Would you like to explore any particular aspect in more depth?";
     }
     
-    // Default response
     return isSpanish
       ? "Gracias por compartir tus pensamientos. La coherencia y consistencia en la estrategia de marca son fundamentales para construir una identidad sólida. ¿Hay algún aspecto específico sobre el que quieras profundizar?"
       : "Thank you for sharing your thoughts. Coherence and consistency in brand strategy are essential for building a strong identity. Is there any specific aspect you'd like to explore further?";
   };
 
-  // Simulated feedback response specifically for conclusion
   const getSimulatedFeedbackResponse = (userConclusion: string): string => {
     if (!userConclusion.trim()) {
       return isSpanish
@@ -273,7 +282,6 @@ const ConclusionExercise = () => {
         : "I don't see a conclusion in your message. Could you share your conclusion so I can provide feedback?";
     }
     
-    // Generate a more specific response about the conclusion
     return isSpanish
       ? "Gracias por compartir tu conclusión. Has presentado algunos puntos interesantes sobre la estrategia de marca. Me gusta especialmente cómo has considerado la coherencia entre los valores de la marca y su comunicación. Para fortalecer aún más tu conclusión, podrías considerar añadir ejemplos específicos o casos de estudio que ilustren tus puntos. También podrías reflexionar sobre cómo estos principios de marca podrían aplicarse en diferentes contextos o industrias. ¿Hay algún aspecto específico de tu conclusión sobre el que te gustaría profundizar?"
       : "Thank you for sharing your conclusion. You've presented some interesting points about brand strategy. I particularly like how you've considered the coherence between brand values and communication. To strengthen your conclusion further, you might consider adding specific examples or case studies that illustrate your points. You could also reflect on how these branding principles might apply in different contexts or industries. Is there any specific aspect of your conclusion you'd like to explore further?";
@@ -306,7 +314,16 @@ const ConclusionExercise = () => {
                 placeholder={isSpanish ? "Escribe tu conclusión aquí..." : "Write your conclusion here..."}
                 className="min-h-[200px] mb-4 font-inter"
               />
-              <div className="flex justify-end">
+              <div className="flex justify-between">
+                <Button 
+                  onClick={handleReset}
+                  variant="outline"
+                  className="flex items-center gap-2"
+                >
+                  <RefreshCcw size={18} />
+                  {isSpanish ? "Reiniciar ejercicio" : "Reset exercise"}
+                </Button>
+                
                 <Button 
                   onClick={askForFeedback}
                   className="flex items-center gap-2"
