@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { FileText, Save, MessageSquare, Download } from "lucide-react";
+import { FileText, Save, MessageSquare, Download, SendHorizonal } from "lucide-react";
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
 import { useLocation } from "react-router-dom";
@@ -119,6 +118,58 @@ const ConclusionExercise = () => {
     }
   };
 
+  const askForFeedback = () => {
+    if (!conclusion.trim()) {
+      toast.error(isSpanish 
+        ? "Por favor, escribe tu conclusión primero." 
+        : "Please write your conclusion first.");
+      return;
+    }
+
+    const feedbackPrompt = isSpanish
+      ? "Por favor, dame tu opinión sobre mi conclusión."
+      : "Please give me feedback on my conclusion.";
+    
+    setChatInput(feedbackPrompt);
+    
+    // Add user message to chat
+    const userMessage: ChatMessage = {
+      role: 'user',
+      content: `${feedbackPrompt}\n\n"${conclusion}"`,
+      timestamp: formatTime()
+    };
+    
+    const updatedChat = [...chatHistory, userMessage];
+    setChatHistory(updatedChat);
+    saveChat(updatedChat);
+    setChatInput('');
+    setIsLoading(true);
+    
+    try {
+      // Simulate API call to ChatGPT
+      setTimeout(() => {
+        const aiResponse = getSimulatedFeedbackResponse(conclusion);
+        const assistantMessage: ChatMessage = {
+          role: 'assistant',
+          content: aiResponse,
+          timestamp: formatTime()
+        };
+        
+        const newChat = [...updatedChat, assistantMessage];
+        setChatHistory(newChat);
+        saveChat(newChat);
+        setIsLoading(false);
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Error in chat:', error);
+      setIsLoading(false);
+      toast.error(isSpanish 
+        ? "Error al procesar tu solicitud. Por favor, inténtalo de nuevo." 
+        : "Error processing your request. Please try again.");
+    }
+  };
+
   const handleSaveChat = () => {
     try {
       localStorage.setItem(STORAGE_KEY_CHAT, JSON.stringify(chatHistory));
@@ -214,6 +265,20 @@ const ConclusionExercise = () => {
       : "Thank you for sharing your thoughts. Coherence and consistency in brand strategy are essential for building a strong identity. Is there any specific aspect you'd like to explore further?";
   };
 
+  // Simulated feedback response specifically for conclusion
+  const getSimulatedFeedbackResponse = (userConclusion: string): string => {
+    if (!userConclusion.trim()) {
+      return isSpanish
+        ? "No veo una conclusión en tu mensaje. ¿Podrías compartir tu conclusión para que pueda darte retroalimentación?"
+        : "I don't see a conclusion in your message. Could you share your conclusion so I can provide feedback?";
+    }
+    
+    // Generate a more specific response about the conclusion
+    return isSpanish
+      ? "Gracias por compartir tu conclusión. Has presentado algunos puntos interesantes sobre la estrategia de marca. Me gusta especialmente cómo has considerado la coherencia entre los valores de la marca y su comunicación. Para fortalecer aún más tu conclusión, podrías considerar añadir ejemplos específicos o casos de estudio que ilustren tus puntos. También podrías reflexionar sobre cómo estos principios de marca podrían aplicarse en diferentes contextos o industrias. ¿Hay algún aspecto específico de tu conclusión sobre el que te gustaría profundizar?"
+      : "Thank you for sharing your conclusion. You've presented some interesting points about brand strategy. I particularly like how you've considered the coherence between brand values and communication. To strengthen your conclusion further, you might consider adding specific examples or case studies that illustrate your points. You could also reflect on how these branding principles might apply in different contexts or industries. Is there any specific aspect of your conclusion you'd like to explore further?";
+  };
+
   return (
     <section className="py-32 bg-white">
       <div className="container mx-auto px-4">
@@ -221,122 +286,128 @@ const ConclusionExercise = () => {
           {isSpanish ? "Ejercicio de Conclusión" : "Conclusion Exercise"}
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Conclusion Input */}
-          <div>
-            <Card className="h-full shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <FileText className="text-primary" size={24} />
-                  <h3 className="font-playfair text-xl font-semibold">
-                    {isSpanish ? "Mi Conclusión" : "My Conclusion"}
-                  </h3>
-                </div>
-                <p className="text-gray-600 mb-4 font-inter">
-                  {isSpanish 
-                    ? "Escribe tus conclusiones sobre lo que has aprendido en este módulo sobre estrategia de marca."
-                    : "Write down your conclusions about what you've learned in this module about brand strategy."}
-                </p>
-                <Textarea 
-                  value={conclusion}
-                  onChange={handleConclusionChange}
-                  placeholder={isSpanish ? "Escribe tu conclusión aquí..." : "Write your conclusion here..."}
-                  className="min-h-[200px] mb-4 font-inter"
-                />
-              </CardContent>
-            </Card>
-          </div>
-          
-          {/* Chat Section */}
-          <div>
-            <Card className="h-full shadow-sm flex flex-col">
-              <CardContent className="p-6 flex-grow flex flex-col">
-                <div className="flex items-center gap-3 mb-4">
-                  <MessageSquare className="text-primary" size={24} />
-                  <h3 className="font-playfair text-xl font-semibold">
-                    {isSpanish ? "Conversa sobre tu conclusión" : "Discuss Your Conclusion"}
-                  </h3>
-                </div>
-                
-                {/* Chat display area */}
-                <div className="flex-grow bg-gray-50 rounded-md p-4 mb-4 overflow-y-auto max-h-[400px]">
-                  {chatHistory.length === 0 ? (
-                    <div className="text-center text-gray-500 py-8">
-                      {isSpanish 
-                        ? "Inicia una conversación sobre tu conclusión"
-                        : "Start a conversation about your conclusion"}
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {chatHistory.map((msg, index) => (
-                        <div 
-                          key={index} 
-                          className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
-                        >
-                          <div className={`max-w-[85%] rounded-lg px-4 py-2 ${
-                            msg.role === 'user' 
-                              ? 'bg-primary text-white'
-                              : 'bg-white border border-gray-200'
-                          }`}>
-                            <p className="text-sm font-inter">{msg.content}</p>
-                          </div>
-                          <span className="text-xs text-gray-500 mt-1">
-                            {msg.timestamp}
-                          </span>
-                        </div>
-                      ))}
-                      <div ref={chatEndRef} />
-                    </div>
-                  )}
-                </div>
-                
-                {/* Chat input form */}
-                <form onSubmit={handleChatSubmit} className="flex gap-2">
-                  <Textarea 
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    placeholder={isSpanish ? "Escribe tu mensaje..." : "Type your message..."}
-                    className="min-h-[50px] resize-none flex-grow"
-                  />
-                  <div className="flex flex-col gap-2">
-                    <Button 
-                      type="submit" 
-                      disabled={isLoading || !chatInput.trim()}
-                      className="h-[50px]"
-                    >
-                      {isLoading ? (
-                        <div className="h-5 w-5 border-t-2 border-r-2 border-white rounded-full animate-spin" />
-                      ) : (
-                        isSpanish ? "Enviar" : "Send"
-                      )}
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
+        <div className="max-w-4xl mx-auto mb-8">
+          <Card className="shadow-sm">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <FileText className="text-primary" size={24} />
+                <h3 className="font-playfair text-xl font-semibold">
+                  {isSpanish ? "Mi Conclusión" : "My Conclusion"}
+                </h3>
+              </div>
+              <p className="text-gray-600 mb-4 font-inter">
+                {isSpanish 
+                  ? "Escribe tus conclusiones sobre lo que has aprendido en este módulo sobre estrategia de marca."
+                  : "Write down your conclusions about what you've learned in this module about brand strategy."}
+              </p>
+              <Textarea 
+                value={conclusion}
+                onChange={handleConclusionChange}
+                placeholder={isSpanish ? "Escribe tu conclusión aquí..." : "Write your conclusion here..."}
+                className="min-h-[200px] mb-4 font-inter"
+              />
+              <div className="flex justify-end">
+                <Button 
+                  onClick={askForFeedback}
+                  className="flex items-center gap-2"
+                  disabled={!conclusion.trim() || isLoading}
+                >
+                  <MessageSquare size={18} />
+                  {isSpanish ? "Pedir retroalimentación" : "Ask for feedback"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
         
-        {/* Action buttons */}
-        <div className="flex justify-center mt-8 gap-4">
-          <Button 
-            variant="outline" 
-            onClick={handleSaveChat}
-            disabled={chatHistory.length === 0}
-            className="flex items-center gap-2"
-          >
-            <Save size={18} />
-            {isSpanish ? "Guardar Conversación" : "Save Conversation"}
-          </Button>
-          <Button 
-            variant="outline"
-            onClick={handleDownloadPDF}
-            disabled={!conclusion && chatHistory.length === 0}
-            className="flex items-center gap-2"
-          >
-            <Download size={18} />
-            {isSpanish ? "Descargar como PDF" : "Download as PDF"}
-          </Button>
+        {/* Chat Section */}
+        <div className="max-w-4xl mx-auto">
+          <Card className="shadow-sm">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <MessageSquare className="text-primary" size={24} />
+                <h3 className="font-playfair text-xl font-semibold">
+                  {isSpanish ? "Conversa sobre tu conclusión" : "Discuss Your Conclusion"}
+                </h3>
+              </div>
+              
+              {/* Chat display area */}
+              <div className="bg-gray-50 rounded-md p-4 mb-4 overflow-y-auto h-[400px]">
+                {chatHistory.length === 0 ? (
+                  <div className="text-center text-gray-500 py-8">
+                    {isSpanish 
+                      ? "Escribe tu conclusión arriba y luego haz clic en 'Pedir retroalimentación' para comenzar una conversación"
+                      : "Write your conclusion above and then click 'Ask for feedback' to start a conversation"}
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {chatHistory.map((msg, index) => (
+                      <div 
+                        key={index} 
+                        className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
+                      >
+                        <div className={`max-w-[85%] rounded-lg px-4 py-2 ${
+                          msg.role === 'user' 
+                            ? 'bg-primary text-white'
+                            : 'bg-white border border-gray-200'
+                        }`}>
+                          <p className="text-sm font-inter">{msg.content}</p>
+                        </div>
+                        <span className="text-xs text-gray-500 mt-1">
+                          {msg.timestamp}
+                        </span>
+                      </div>
+                    ))}
+                    <div ref={chatEndRef} />
+                  </div>
+                )}
+              </div>
+              
+              {/* Chat input form */}
+              <form onSubmit={handleChatSubmit} className="flex gap-2">
+                <Textarea 
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  placeholder={isSpanish ? "Escribe tu mensaje..." : "Type your message..."}
+                  className="min-h-[50px] resize-none flex-grow"
+                />
+                <Button 
+                  type="submit" 
+                  disabled={isLoading || !chatInput.trim()}
+                  size="icon"
+                  className="h-[50px] w-[50px]"
+                >
+                  {isLoading ? (
+                    <div className="h-5 w-5 border-t-2 border-r-2 border-white rounded-full animate-spin" />
+                  ) : (
+                    <SendHorizonal size={18} />
+                  )}
+                </Button>
+              </form>
+              
+              {/* Action buttons */}
+              <div className="flex justify-between mt-4">
+                <Button 
+                  variant="outline" 
+                  onClick={handleSaveChat}
+                  disabled={chatHistory.length === 0}
+                  className="flex items-center gap-2"
+                >
+                  <Save size={18} />
+                  {isSpanish ? "Guardar Conversación" : "Save Conversation"}
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={handleDownloadPDF}
+                  disabled={!conclusion && chatHistory.length === 0}
+                  className="flex items-center gap-2"
+                >
+                  <Download size={18} />
+                  {isSpanish ? "Descargar como PDF" : "Download as PDF"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>
