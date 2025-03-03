@@ -10,6 +10,7 @@ import ContextSection from "../components/sections/ContextSection";
 import VisionSection from "../components/sections/VisionSection";
 import ValuesSection from "../components/sections/ValuesSection";
 import CoherenceSection from "../components/sections/CoherenceSection";
+import ConclusionExercise from "../components/ConclusionExercise";
 
 const Index = () => {
   useEffect(() => {
@@ -61,6 +62,11 @@ const Index = () => {
           </div>
         </div>
       </section>
+      
+      {/* Conclusion Exercise Section */}
+      <div className="opacity-0 translate-y-10 scroll-animate">
+        <ConclusionExercise />
+      </div>
 
       {/* Download Section */}
       <div className="opacity-0 translate-y-10 scroll-animate">

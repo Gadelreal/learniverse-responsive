@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+
 const BrandStrategyCards = [{
   title: "Clear Brand Identity",
   description: "Establish a clear and distinct brand identity that reflects the organization's values, personality, and positioning in the market."
@@ -26,10 +28,12 @@ const BrandStrategyCards = [{
   title: "Brand Governance",
   description: "Establish mechanisms for brand governance and oversight."
 }];
+
 const CoherenceSection = () => {
-  return <section id="coherence" className="py-32 bg-gray-50">
+  return (
+    <section id="coherence" className="py-32 bg-gray-50">
       <div className="container mx-auto px-4">
-        <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900 opacity-0 translate-y-10 scroll-animate px-[240px]">
+        <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900 opacity-0 translate-y-10 scroll-animate">
           Coherence & Consistency: From a Strategic Decision to the Final Implementation
         </h2>
         <div className="max-w-6xl mx-auto">
@@ -39,12 +43,16 @@ const CoherenceSection = () => {
             </p>
             
             <div className="mt-12 opacity-0 translate-y-10 scroll-animate">
-              <Carousel opts={{
-              align: "start",
-              loop: true
-            }} className="w-full">
+              <Carousel
+                opts={{
+                  align: "start",
+                  loop: true
+                }}
+                className="w-full"
+              >
                 <CarouselContent className="-ml-2 md:-ml-4">
-                  {BrandStrategyCards.map((card, index) => <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
+                  {BrandStrategyCards.map((card, index) => (
+                    <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
                       <div className="p-1 h-full">
                         <Card className="bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-[400px] flex flex-col">
                           <CardContent className="p-8 flex flex-col h-full">
@@ -61,7 +69,8 @@ const CoherenceSection = () => {
                           </CardContent>
                         </Card>
                       </div>
-                    </CarouselItem>)}
+                    </CarouselItem>
+                  ))}
                 </CarouselContent>
                 <div className="hidden md:block">
                   <CarouselPrevious className="left-0 -translate-x-1/2" />
@@ -72,6 +81,8 @@ const CoherenceSection = () => {
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default CoherenceSection;
