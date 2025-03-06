@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
@@ -17,7 +16,6 @@ const ExerciseForm = () => {
     ? "Ahora que has aprendido sobre estrategia de marca, ¿qué valores implementarías en tu organización?"
     : "Now that you have learned about brand strategy, what values would you implement in your organization?";
 
-  // Load saved answer from localStorage on component mount
   useEffect(() => {
     const savedAnswer = localStorage.getItem(STORAGE_KEY);
     if (savedAnswer) {
@@ -51,7 +49,6 @@ const ExerciseForm = () => {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newAnswer = e.target.value;
     setAnswer(newAnswer);
-    // Optionally auto-save as user types
     try {
       localStorage.setItem(STORAGE_KEY, newAnswer);
     } catch (error) {
@@ -63,23 +60,18 @@ const ExerciseForm = () => {
     try {
       const doc = new jsPDF();
 
-      // Add title
       doc.setFontSize(16);
       doc.setFont("helvetica", "bold");
 
-      // Split title into multiple lines if needed
       const splitTitle = doc.splitTextToSize(questionTitle, 180);
       doc.text(splitTitle, 15, 20);
 
-      // Add answer
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
 
-      // Split answer into multiple lines
       const splitAnswer = doc.splitTextToSize(answer || (isSpanish ? "No se ha proporcionado ninguna respuesta" : "No answer provided"), 180);
       doc.text(splitAnswer, 15, 40);
 
-      // Save the PDF
       doc.save('brand-strategy-exercise.pdf');
       toast.success(isSpanish 
         ? "PDF descargado correctamente." 
@@ -118,28 +110,46 @@ const ExerciseForm = () => {
           </div>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
+        <div className="flex justify-end gap-3">
           <Button 
             type="button" 
             onClick={handleReset} 
             variant="outline"
-            className="w-full sm:w-auto"
+            className="min-w-[100px] bg-white hover:bg-gray-50"
           >
             {isSpanish ? "Restablecer" : "Reset"}
           </Button>
           <Button 
+            type="submit" 
+            className="min-w-[100px] bg-gray-900 hover:bg-gray-800 text-white"
+          >
+            {isSpanish ? "Enviar" : "Submit"}
+          </Button>
+        </div>
+
+        <div className="flex justify-start mt-2">
+          <Button 
             type="button" 
             onClick={handleDownloadPDF} 
-            variant="outline"
-            className="w-full sm:w-auto"
+            variant="ghost"
+            size="sm"
+            className="text-gray-500 hover:text-gray-700 p-0 h-auto"
           >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              className="w-4 h-4 mr-1"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+              />
+            </svg>
             {isSpanish ? "Descargar PDF" : "Download PDF"}
-          </Button>
-          <Button 
-            type="submit" 
-            className="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 text-white"
-          >
-            {isSpanish ? "Enviar Respuesta" : "Submit Answer"}
           </Button>
         </div>
       </form>
