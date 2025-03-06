@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
@@ -17,7 +16,6 @@ interface ChatMessage {
   timestamp: string;
 }
 
-// Context information about the course content
 const getCourseContext = (isSpanish: boolean) => {
   return isSpanish ? 
     `Este módulo trata sobre estrategia de marca y cubre los siguientes temas principales:
@@ -49,7 +47,6 @@ const ConclusionExercise = () => {
   const isSpanish = location.pathname.includes('/es');
   const courseContext = getCourseContext(isSpanish);
 
-  // Load saved data on component mount
   useEffect(() => {
     const savedConclusion = localStorage.getItem(STORAGE_KEY_CONCLUSION);
     const savedChat = localStorage.getItem(STORAGE_KEY_CHAT);
@@ -67,7 +64,6 @@ const ConclusionExercise = () => {
     }
   }, []);
 
-  // Scroll to bottom of chat when new messages are added
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -103,7 +99,6 @@ const ConclusionExercise = () => {
     e.preventDefault();
     if (!chatInput.trim()) return;
     
-    // Add user message to chat
     const userMessage: ChatMessage = {
       role: 'user',
       content: chatInput,
@@ -117,9 +112,7 @@ const ConclusionExercise = () => {
     setIsLoading(true);
     
     try {
-      // Simulate API call to ChatGPT
       setTimeout(() => {
-        // Including context from user's conclusion and course content
         const aiResponse = getSimulatedResponse(chatInput, conclusion);
         const assistantMessage: ChatMessage = {
           role: 'assistant',
@@ -156,7 +149,6 @@ const ConclusionExercise = () => {
     
     setChatInput(feedbackPrompt);
     
-    // Add user message to chat
     const userMessage: ChatMessage = {
       role: 'user',
       content: `${feedbackPrompt}\n\n"${conclusion}"`,
@@ -170,7 +162,6 @@ const ConclusionExercise = () => {
     setIsLoading(true);
     
     try {
-      // Simulate API call to ChatGPT with context
       setTimeout(() => {
         const aiResponse = getSimulatedFeedbackResponse(conclusion);
         const assistantMessage: ChatMessage = {
@@ -212,29 +203,24 @@ const ConclusionExercise = () => {
     try {
       const doc = new jsPDF();
       
-      // Set up the document
       doc.setFontSize(18);
       doc.setFont("helvetica", "bold");
       doc.text(isSpanish ? "Mi Conclusión" : "My Conclusion", 15, 20);
       
-      // Add conclusion
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
       const conclusionLines = doc.splitTextToSize(conclusion || (isSpanish ? "No se proporcionó conclusión" : "No conclusion provided"), 180);
       doc.text(conclusionLines, 15, 30);
       
-      // Add chat history title
       const chatStartY = 30 + (conclusionLines.length * 7) + 10;
       doc.setFontSize(16);
       doc.setFont("helvetica", "bold");
       doc.text(isSpanish ? "Conversación" : "Chat Conversation", 15, chatStartY);
       
-      // Add chat messages
       let yOffset = chatStartY + 10;
       doc.setFontSize(11);
       
       chatHistory.forEach((message) => {
-        // Add role/sender
         doc.setFont("helvetica", "bold");
         const sender = message.role === 'user' 
           ? (isSpanish ? "Tú" : "You") 
@@ -242,20 +228,16 @@ const ConclusionExercise = () => {
         doc.text(`${sender} (${message.timestamp}):`, 15, yOffset);
         yOffset += 7;
         
-        // Add message content
-        doc.setFont("helvetica", "normal");
         const messageLines = doc.splitTextToSize(message.content, 175);
         doc.text(messageLines, 20, yOffset);
         yOffset += (messageLines.length * 6) + 5;
         
-        // Handle page overflow
         if (yOffset > 280) {
           doc.addPage();
           yOffset = 20;
         }
       });
       
-      // Save the PDF
       doc.save(isSpanish ? 'mi-conclusion-y-chat.pdf' : 'my-conclusion-and-chat.pdf');
       toast.success(isSpanish 
         ? "PDF descargado correctamente." 
@@ -281,9 +263,7 @@ const ConclusionExercise = () => {
       : "Data has been reset successfully.");
   };
 
-  // Enhanced simulated responses that take into account the course context
   const getSimulatedResponse = (message: string, userConclusion: string): string => {
-    // Include course context in the consideration
     if (message.toLowerCase().includes('help') || message.toLowerCase().includes('ayuda')) {
       return isSpanish
         ? `Estoy aquí para ayudarte a reflexionar sobre tus conclusiones relacionadas con la estrategia de marca. Basándome en el contenido del módulo sobre contexto de marca, visión, valores, coherencia y canales de comunicación, ¿en qué aspecto específico necesitas ayuda?`
@@ -301,7 +281,6 @@ const ConclusionExercise = () => {
       : `Thank you for sharing your thoughts on brand strategy. To build a strong identity, it's essential to integrate the five pillars we've studied: context (competitive analysis and target audience), vision (purpose and mission), values (brand personality), coherence (consistency across all touchpoints), and appropriate channel selection. Is there any of these aspects you would like to explore further?`;
   };
 
-  // Enhanced feedback response that incorporates course context
   const getSimulatedFeedbackResponse = (userConclusion: string): string => {
     if (!userConclusion.trim()) {
       return isSpanish
@@ -309,12 +288,10 @@ const ConclusionExercise = () => {
         : "I don't see a conclusion in your message. Could you share your conclusion so I can provide feedback?";
     }
     
-    // Analysis of the conclusion length to provide more personalized feedback
     const isBrief = userConclusion.length < 100;
     const isMedium = userConclusion.length >= 100 && userConclusion.length < 300;
     const isDetailed = userConclusion.length >= 300;
     
-    // Check for keywords to determine which aspects of brand strategy are covered
     const mentionsContext = userConclusion.toLowerCase().includes('context') || userConclusion.toLowerCase().includes('contexto');
     const mentionsVision = userConclusion.toLowerCase().includes('vision') || userConclusion.toLowerCase().includes('visión');
     const mentionsValues = userConclusion.toLowerCase().includes('values') || userConclusion.toLowerCase().includes('valores');
@@ -332,7 +309,6 @@ const ConclusionExercise = () => {
         feedback += "Has desarrollado una conclusión muy detallada, lo que demuestra una reflexión profunda. ";
       }
       
-      // Feedback based on content coverage
       if (mentionsContext && mentionsVision && mentionsValues && mentionsCoherence && mentionsChannels) {
         feedback += "Has abordado los cinco pilares fundamentales de la estrategia de marca que se discutieron en el módulo: contexto, visión, valores, coherencia y canales de comunicación. Esto demuestra una comprensión integral del tema. ";
       } else {
@@ -366,7 +342,6 @@ const ConclusionExercise = () => {
         feedback += "You've developed a very detailed conclusion, showing deep reflection. ";
       }
       
-      // Feedback based on content coverage
       if (mentionsContext && mentionsVision && mentionsValues && mentionsCoherence && mentionsChannels) {
         feedback += "You've addressed all five fundamental pillars of brand strategy discussed in the module: context, vision, values, coherence, and communication channels. This demonstrates a comprehensive understanding of the topic. ";
       } else {
@@ -423,11 +398,11 @@ const ConclusionExercise = () => {
                 placeholder={isSpanish ? "Escribe tu conclusión aquí..." : "Write your conclusion here..."}
                 className="min-h-[200px] mb-4 font-inter"
               />
-              <div className="flex justify-between">
+              <div className="flex flex-col sm:flex-row justify-between gap-3">
                 <Button 
                   onClick={handleReset}
                   variant="outline"
-                  className="flex items-center gap-2"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2"
                 >
                   <RefreshCcw size={18} />
                   {isSpanish ? "Reiniciar ejercicio" : "Reset exercise"}
@@ -435,7 +410,7 @@ const ConclusionExercise = () => {
                 
                 <Button 
                   onClick={askForFeedback}
-                  className="flex items-center gap-2"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2"
                   disabled={!conclusion.trim() || isLoading}
                 >
                   <MessageSquare size={18} />
@@ -446,7 +421,6 @@ const ConclusionExercise = () => {
           </Card>
         </div>
         
-        {/* Chat Section */}
         <div className="max-w-4xl mx-auto">
           <Card className="shadow-sm">
             <CardContent className="p-6">
@@ -457,7 +431,6 @@ const ConclusionExercise = () => {
                 </h3>
               </div>
               
-              {/* Chat display area */}
               <div className="bg-gray-50 rounded-md p-4 mb-4 overflow-y-auto h-[400px]">
                 {chatHistory.length === 0 ? (
                   <div className="text-center text-gray-500 py-8">
@@ -489,7 +462,6 @@ const ConclusionExercise = () => {
                 )}
               </div>
               
-              {/* Chat input form */}
               <form onSubmit={handleChatSubmit} className="flex gap-2">
                 <Textarea 
                   value={chatInput}
@@ -511,13 +483,12 @@ const ConclusionExercise = () => {
                 </Button>
               </form>
               
-              {/* Action buttons */}
-              <div className="flex justify-between mt-4">
+              <div className="flex flex-col sm:flex-row justify-between gap-3 mt-4">
                 <Button 
                   variant="outline" 
                   onClick={handleSaveChat}
                   disabled={chatHistory.length === 0}
-                  className="flex items-center gap-2"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2"
                 >
                   <Save size={18} />
                   {isSpanish ? "Guardar Conversación" : "Save Conversation"}
@@ -526,7 +497,7 @@ const ConclusionExercise = () => {
                   variant="outline"
                   onClick={handleDownloadPDF}
                   disabled={!conclusion && chatHistory.length === 0}
-                  className="flex items-center gap-2"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2"
                 >
                   <Download size={18} />
                   {isSpanish ? "Descargar como PDF" : "Download as PDF"}

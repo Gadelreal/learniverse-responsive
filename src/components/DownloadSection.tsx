@@ -118,7 +118,7 @@ const DownloadSection = () => {
       <div className="container mx-auto px-4">
         <Card className="w-full max-w-4xl mx-auto p-6 md:p-12 bg-white shadow-sm">
           <div className="flex flex-col md:flex-row md:items-start gap-6">
-            <div className="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-lg mb-4 md:mb-0">
+            <div className="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-lg mb-4 md:mb-0 flex-shrink-0">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -146,7 +146,7 @@ const DownloadSection = () => {
               <Button
                 onClick={handleDownload}
                 variant="outline"
-                className="w-full md:w-auto inline-flex items-center justify-center px-6 py-2 border border-gray-200 rounded-md font-inter text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                className="w-full inline-flex items-center justify-center px-6 py-3 rounded-md font-inter text-sm text-gray-600 hover:bg-gray-50 transition-colors"
               >
                 {isSpanish ? "DESCARGAR PDF" : "DOWNLOAD PDF"}
               </Button>
