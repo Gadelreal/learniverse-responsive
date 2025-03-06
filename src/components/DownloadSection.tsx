@@ -29,6 +29,10 @@ const DownloadSection = () => {
       const brandStrategyAnswer = localStorage.getItem('brand_strategy_exercise_answer') || (isSpanish ? 'No se ha proporcionado respuesta' : 'No answer provided');
       const channelsAnswers = JSON.parse(localStorage.getItem('ilunion_channels_exercise_answers') || '[]');
       
+      // Get conclusion and chat history from local storage
+      const conclusion = localStorage.getItem('brand_strategy_conclusion') || (isSpanish ? 'No se ha proporcionado conclusión' : 'No conclusion provided');
+      const chatHistory = JSON.parse(localStorage.getItem('brand_strategy_chat_history') || '[]');
+      
       // Set up the document
       doc.setFont("helvetica", "normal");
       doc.setFontSize(20);
@@ -42,7 +46,7 @@ const DownloadSection = () => {
       doc.text(brandStrategyLines, 20, 50);
       
       // Add channels exercise
-      const yOffset = 50 + (brandStrategyLines.length * 7);
+      let yOffset = 50 + (brandStrategyLines.length * 7);
       doc.setFontSize(16);
       doc.text(isSpanish ? "Ejercicio de Canales" : "Channels Exercise", 20, yOffset);
       doc.setFontSize(12);
@@ -54,6 +58,46 @@ const DownloadSection = () => {
           : `Message ${index + 1}: ${answer}`;
         doc.text(text, 20, yOffset + 10 + (index * 10));
       });
+      
+      // Add conclusion
+      yOffset = yOffset + 10 + (channelsAnswers.length * 10) + 10;
+      doc.setFontSize(16);
+      doc.text(isSpanish ? "Conclusión" : "Conclusion", 20, yOffset);
+      doc.setFontSize(12);
+      const conclusionLines = doc.splitTextToSize(conclusion, 170);
+      doc.text(conclusionLines, 20, yOffset + 10);
+      
+      // Add chat history
+      yOffset = yOffset + 10 + (conclusionLines.length * 7) + 10;
+      
+      if (chatHistory.length > 0) {
+        doc.setFontSize(16);
+        doc.text(isSpanish ? "Conversación" : "Conversation", 20, yOffset);
+        doc.setFontSize(12);
+        
+        let chatYOffset = yOffset + 10;
+        
+        chatHistory.forEach((message: any) => {
+          // Add a new page if we're near the bottom
+          if (chatYOffset > 270) {
+            doc.addPage();
+            chatYOffset = 20;
+          }
+          
+          const sender = message.role === 'user' 
+            ? (isSpanish ? "Tú" : "You") 
+            : (isSpanish ? "Asistente" : "Assistant");
+          
+          doc.setFont("helvetica", "bold");
+          doc.text(`${sender} (${message.timestamp}):`, 20, chatYOffset);
+          doc.setFont("helvetica", "normal");
+          
+          const messageLines = doc.splitTextToSize(message.content, 170);
+          doc.text(messageLines, 20, chatYOffset + 5);
+          
+          chatYOffset += 10 + (messageLines.length * 5);
+        });
+      }
       
       // Save the PDF
       doc.save(isSpanish ? 'respuestas-ejercicios.pdf' : 'exercise-answers.pdf');
@@ -95,8 +139,8 @@ const DownloadSection = () => {
               </h2>
               <p className="font-inter text-gray-600 mb-8">
                 {isSpanish 
-                  ? "Descarga un archivo PDF que contiene todas tus respuestas de los ejercicios en este módulo."
-                  : "Download a PDF file containing all your answers from the exercises in this module."}
+                  ? "Descarga un archivo PDF que contiene todas tus respuestas de los ejercicios en este módulo, incluyendo tu conclusión y conversación."
+                  : "Download a PDF file containing all your answers from the exercises in this module, including your conclusion and conversation."}
               </p>
               <button
                 onClick={handleDownload}
