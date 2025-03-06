@@ -4,6 +4,7 @@ import { Card } from "./ui/card";
 import jsPDF from 'jspdf';
 import { toast } from "sonner";
 import { useLocation } from "react-router-dom";
+import { Button } from "./ui/button";
 
 const messages = [
   "You will never be given a dream without also giving yourself the power to make it come true.",
@@ -115,9 +116,9 @@ const DownloadSection = () => {
   return (
     <section className="py-32 bg-white">
       <div className="container mx-auto px-4">
-        <Card className="w-full max-w-4xl mx-auto p-12 bg-white shadow-sm">
-          <div className="flex items-start gap-6">
-            <div className="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-lg">
+        <Card className="w-full max-w-4xl mx-auto p-6 md:p-12 bg-white shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-start gap-6">
+            <div className="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-lg mb-4 md:mb-0">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -142,12 +143,13 @@ const DownloadSection = () => {
                   ? "Descarga un archivo PDF que contiene todas tus respuestas de los ejercicios en este módulo, incluyendo tu conclusión y conversación."
                   : "Download a PDF file containing all your answers from the exercises in this module, including your conclusion and conversation."}
               </p>
-              <button
+              <Button
                 onClick={handleDownload}
-                className="inline-flex items-center justify-center px-6 py-2 border border-gray-200 rounded-md font-inter text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                variant="outline"
+                className="w-full md:w-auto inline-flex items-center justify-center px-6 py-2 border border-gray-200 rounded-md font-inter text-sm text-gray-600 hover:bg-gray-50 transition-colors"
               >
                 {isSpanish ? "DESCARGAR PDF" : "DOWNLOAD PDF"}
-              </button>
+              </Button>
             </div>
           </div>
         </Card>
