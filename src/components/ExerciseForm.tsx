@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
 import { useLocation } from "react-router-dom";
+import { Button } from "./ui/button";
 
 const STORAGE_KEY = 'brand_strategy_exercise_answer';
 
@@ -117,27 +118,29 @@ const ExerciseForm = () => {
           </div>
         </div>
         
-        <div className="flex justify-end gap-4">
-          <button 
+        <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
+          <Button 
             type="button" 
             onClick={handleReset} 
-            className="px-6 py-2 border border-gray-200 rounded-md font-inter text-secondary-foreground hover:bg-gray-50 transition-colors"
+            variant="outline"
+            className="w-full sm:w-auto"
           >
             {isSpanish ? "Restablecer" : "Reset"}
-          </button>
-          <button 
+          </Button>
+          <Button 
             type="button" 
             onClick={handleDownloadPDF} 
-            className="px-6 py-2 border border-gray-200 rounded-md font-inter text-secondary-foreground hover:bg-gray-50 transition-colors"
+            variant="outline"
+            className="w-full sm:w-auto"
           >
             {isSpanish ? "Descargar PDF" : "Download PDF"}
-          </button>
-          <button 
+          </Button>
+          <Button 
             type="submit" 
-            className="px-6 py-2 text-white rounded-md font-inter transition-colors bg-gray-800 hover:bg-gray-700"
+            className="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 text-white"
           >
             {isSpanish ? "Enviar Respuesta" : "Submit Answer"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>;
