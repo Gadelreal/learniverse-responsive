@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from "./ui/card";
 import jsPDF from 'jspdf';
 import { toast } from "sonner";
 import { useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
+import CompletionModal from './CompletionModal';
 
 const messages = [
   "You will never be given a dream without also giving yourself the power to make it come true.",
@@ -21,6 +22,7 @@ const messages = [
 const DownloadSection = () => {
   const location = useLocation();
   const isSpanish = location.pathname.includes('/es');
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
 
   const handleDownload = () => {
     try {
@@ -105,6 +107,12 @@ const DownloadSection = () => {
       toast.success(isSpanish 
         ? "PDF descargado correctamente." 
         : "PDF downloaded successfully!");
+        
+      // Show the completion modal after successful download
+      setShowCompletionModal(true);
+      
+      // Trigger the survey feedback widget
+      document.dispatchEvent(new CustomEvent('ie-feedback-widget-openModal'));
     } catch (error) {
       toast.error(isSpanish 
         ? "Error al generar el PDF. Por favor, inténtalo de nuevo." 
@@ -154,6 +162,12 @@ const DownloadSection = () => {
           </div>
         </Card>
       </div>
+      
+      {/* Completion Modal */}
+      <CompletionModal 
+        isOpen={showCompletionModal} 
+        onClose={() => setShowCompletionModal(false)} 
+      />
     </section>
   );
 };
