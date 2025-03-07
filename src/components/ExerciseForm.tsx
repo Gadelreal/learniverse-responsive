@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
@@ -111,19 +110,19 @@ const ExerciseForm = () => {
           </div>
         </div>
         
-        {/* Responsive button layout */}
         <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
           <Button 
             type="button" 
             onClick={handleReset} 
             variant="outline"
-            className="w-full sm:w-auto bg-white hover:bg-gray-50"
+            className="w-full sm:w-auto"
           >
             {isSpanish ? "Restablecer" : "Reset"}
           </Button>
           <Button 
             type="submit" 
-            className="w-full sm:w-auto bg-gray-900 hover:bg-gray-800 text-white"
+            variant="default"
+            className="w-full sm:w-auto"
           >
             {isSpanish ? "Enviar" : "Submit"}
           </Button>
@@ -135,7 +134,7 @@ const ExerciseForm = () => {
             onClick={handleDownloadPDF} 
             variant="ghost"
             size="sm"
-            className="text-gray-500 hover:text-gray-700 p-0 h-auto"
+            className="text-primary hover:text-primary/80 p-0 h-auto"
           >
             <svg 
               xmlns="http://www.w3.org/2000/svg" 

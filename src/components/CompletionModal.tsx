@@ -55,7 +55,8 @@ const CompletionModal = ({ isOpen, onClose }: CompletionModalProps) => {
               
               <Button 
                 onClick={onClose}
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white"
+                variant="default"
+                className="w-full"
               >
                 {isSpanish ? "Continuar" : "Continue"}
               </Button>

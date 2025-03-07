@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from "./ui/card";
 import jsPDF from 'jspdf';
@@ -28,27 +27,22 @@ const DownloadSection = () => {
     try {
       const doc = new jsPDF();
       
-      // Get answers from local storage
       const brandStrategyAnswer = localStorage.getItem('brand_strategy_exercise_answer') || (isSpanish ? 'No se ha proporcionado respuesta' : 'No answer provided');
       const channelsAnswers = JSON.parse(localStorage.getItem('ilunion_channels_exercise_answers') || '[]');
       
-      // Get conclusion and chat history from local storage
       const conclusion = localStorage.getItem('brand_strategy_conclusion') || (isSpanish ? 'No se ha proporcionado conclusión' : 'No conclusion provided');
       const chatHistory = JSON.parse(localStorage.getItem('brand_strategy_chat_history') || '[]');
       
-      // Set up the document
       doc.setFont("helvetica", "normal");
       doc.setFontSize(20);
       doc.text(isSpanish ? "Respuestas de Ejercicios" : "Exercise Answers", 20, 20);
       
-      // Add brand strategy exercise
       doc.setFontSize(16);
       doc.text(isSpanish ? "Ejercicio de Estrategia de Marca" : "Brand Strategy Exercise", 20, 40);
       doc.setFontSize(12);
       const brandStrategyLines = doc.splitTextToSize(brandStrategyAnswer, 170);
       doc.text(brandStrategyLines, 20, 50);
       
-      // Add channels exercise
       let yOffset = 50 + (brandStrategyLines.length * 7);
       doc.setFontSize(16);
       doc.text(isSpanish ? "Ejercicio de Canales" : "Channels Exercise", 20, yOffset);
@@ -62,7 +56,6 @@ const DownloadSection = () => {
         doc.text(text, 20, yOffset + 10 + (index * 10));
       });
       
-      // Add conclusion
       yOffset = yOffset + 10 + (channelsAnswers.length * 10) + 10;
       doc.setFontSize(16);
       doc.text(isSpanish ? "Conclusión" : "Conclusion", 20, yOffset);
@@ -70,7 +63,6 @@ const DownloadSection = () => {
       const conclusionLines = doc.splitTextToSize(conclusion, 170);
       doc.text(conclusionLines, 20, yOffset + 10);
       
-      // Add chat history
       yOffset = yOffset + 10 + (conclusionLines.length * 7) + 10;
       
       if (chatHistory.length > 0) {
@@ -81,7 +73,6 @@ const DownloadSection = () => {
         let chatYOffset = yOffset + 10;
         
         chatHistory.forEach((message: any) => {
-          // Add a new page if we're near the bottom
           if (chatYOffset > 270) {
             doc.addPage();
             chatYOffset = 20;
@@ -102,16 +93,13 @@ const DownloadSection = () => {
         });
       }
       
-      // Save the PDF
       doc.save(isSpanish ? 'respuestas-ejercicios.pdf' : 'exercise-answers.pdf');
       toast.success(isSpanish 
         ? "PDF descargado correctamente." 
         : "PDF downloaded successfully!");
         
-      // Show the completion modal after successful download
       setShowCompletionModal(true);
       
-      // Trigger the survey feedback widget
       document.dispatchEvent(new CustomEvent('ie-feedback-widget-openModal'));
     } catch (error) {
       toast.error(isSpanish 
@@ -154,7 +142,7 @@ const DownloadSection = () => {
               <Button
                 onClick={handleDownload}
                 variant="outline"
-                className="w-full inline-flex items-center justify-center px-6 py-3 rounded-md font-inter text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                className="w-full"
               >
                 {isSpanish ? "DESCARGAR PDF" : "DOWNLOAD PDF"}
               </Button>
@@ -163,7 +151,6 @@ const DownloadSection = () => {
         </Card>
       </div>
       
-      {/* Completion Modal */}
       <CompletionModal 
         isOpen={showCompletionModal} 
         onClose={() => setShowCompletionModal(false)} 
