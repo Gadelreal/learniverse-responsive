@@ -13,6 +13,13 @@ const CompletionModal = ({ isOpen, onClose }: CompletionModalProps) => {
   const location = useLocation();
   const isSpanish = location.pathname.includes('/es');
 
+  // Trigger feedback survey when modal opens
+  React.useEffect(() => {
+    if (isOpen) {
+      document.dispatchEvent(new CustomEvent('ie-feedback-widget-openModal'));
+    }
+  }, [isOpen]);
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md border-0 overflow-hidden p-0">
@@ -55,8 +62,8 @@ const CompletionModal = ({ isOpen, onClose }: CompletionModalProps) => {
               
               <Button 
                 onClick={onClose}
-                variant="default"
-                className="w-full"
+                variant="accent"
+                size="full"
               >
                 {isSpanish ? "Continuar" : "Continue"}
               </Button>

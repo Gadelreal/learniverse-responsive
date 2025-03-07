@@ -4,36 +4,17 @@ import Footer from "../components/Footer";
 import ExerciseForm from "../components/ExerciseForm";
 import ChannelsExercise from "../components/ChannelsExercise";
 import DownloadSection from "../components/DownloadSection";
-import { useEffect } from "react";
 import HeroSection from "../components/sections/HeroSection";
 import ContextSection from "../components/sections/ContextSection";
 import VisionSection from "../components/sections/VisionSection";
 import ValuesSection from "../components/sections/ValuesSection";
 import CoherenceSection from "../components/sections/CoherenceSection";
 import ConclusionExercise from "../components/ConclusionExercise";
+import useScrollAnimation from "../hooks/useScrollAnimation";
 
 const Index = () => {
-  useEffect(() => {
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-fade-up');
-          entry.target.classList.remove('opacity-0', 'translate-y-10');
-        }
-      });
-    };
-
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    const elements = document.querySelectorAll('.scroll-animate');
-    elements.forEach(el => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+  // Use the extracted scroll animation hook
+  useScrollAnimation();
 
   return (
     <div className="min-h-screen bg-white">
