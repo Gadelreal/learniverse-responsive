@@ -19,41 +19,42 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
-      <HeroSection />
-      <ContextSection />
-      <VisionSection />
-      <ValuesSection />
-      <CoherenceSection />
+      <main id="main-content" tabIndex={-1}>
+        <HeroSection />
+        <ContextSection />
+        <VisionSection />
+        <ValuesSection />
+        <CoherenceSection />
 
-      {/* Exercise Section */}
-      <section className="py-32 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="font-playfair text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900 opacity-0 translate-y-10 scroll-animate">
-            Practice Exercise
-          </h2>
-          <ExerciseForm />
-        </div>
-      </section>
-
-      {/* Channels Exercise Section */}
-      <section className="py-32 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="opacity-0 translate-y-10 scroll-animate">
-            <ChannelsExercise />
+        {/* Exercise Section */}
+        <section className="py-32 bg-white" aria-labelledby="practice-exercise-heading">
+          <div className="container mx-auto px-4">
+            <h2 id="practice-exercise-heading" className="font-playfair text-4xl md:text-5xl font-bold text-center mb-16 text-gray-900 opacity-0 translate-y-10 scroll-animate">
+              Practice Exercise
+            </h2>
+            <ExerciseForm />
           </div>
+        </section>
+
+        {/* Channels Exercise Section */}
+        <section className="py-32 bg-gray-50" aria-label="Channels Exercise">
+          <div className="container mx-auto px-4">
+            <div className="opacity-0 translate-y-10 scroll-animate">
+              <ChannelsExercise />
+            </div>
+          </div>
+        </section>
+        
+        {/* Conclusion Exercise Section */}
+        <div className="opacity-0 translate-y-10 scroll-animate">
+          <ConclusionExercise />
         </div>
-      </section>
-      
-      {/* Conclusion Exercise Section */}
-      <div className="opacity-0 translate-y-10 scroll-animate">
-        <ConclusionExercise />
-      </div>
 
-      {/* Download Section */}
-      <div className="opacity-0 translate-y-10 scroll-animate">
-        <DownloadSection />
-      </div>
-
+        {/* Download Section */}
+        <div className="opacity-0 translate-y-10 scroll-animate">
+          <DownloadSection />
+        </div>
+      </main>
       <Footer />
     </div>
   );

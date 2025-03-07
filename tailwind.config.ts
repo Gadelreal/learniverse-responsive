@@ -30,20 +30,20 @@ export default {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: '#222222',
+          DEFAULT: '#121212', // Darkened for better contrast
           hover: '#333333',
           foreground: '#FFFFFF'
         },
         secondary: {
           DEFAULT: '#F6F6F7',
-          foreground: '#221F26'
+          foreground: '#121212' // Darkened for better contrast
         },
         muted: {
           DEFAULT: '#F1F0FB',
-          foreground: '#666666'
+          foreground: '#555555' // Darkened for better contrast
         },
         accent: {
-          DEFAULT: '#222222',
+          DEFAULT: '#121212', // Darkened for better contrast
           foreground: '#FFFFFF'
         }
       },
