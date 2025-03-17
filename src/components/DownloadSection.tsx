@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card } from "./ui/card";
 import jsPDF from 'jspdf';
@@ -18,6 +19,27 @@ const messages = [
   "Awaken your power to shape diversity into a more inclusive and supportive world."
 ];
 
+// Define PDF styling constants
+const PDF_STYLES = {
+  colors: {
+    primary: '#8B5CF6', // Purple
+    secondary: '#F97316', // Orange
+    text: '#1A1F2C',
+    lightGray: '#F1F0FB',
+    mediumGray: '#8E9196',
+  },
+  margins: {
+    top: 20,
+    left: 20,
+    right: 20,
+  },
+  spacing: {
+    paragraph: 7,
+    section: 15,
+    header: 10,
+  }
+};
+
 const DownloadSection = () => {
   const location = useLocation();
   const isSpanish = location.pathname.includes('/es');
@@ -25,74 +47,228 @@ const DownloadSection = () => {
 
   const handleDownload = () => {
     try {
+      // Create new PDF document
       const doc = new jsPDF();
       
+      // Get stored data
       const brandStrategyAnswer = localStorage.getItem('brand_strategy_exercise_answer') || (isSpanish ? 'No se ha proporcionado respuesta' : 'No answer provided');
       const channelsAnswers = JSON.parse(localStorage.getItem('ilunion_channels_exercise_answers') || '[]');
-      
       const conclusion = localStorage.getItem('brand_strategy_conclusion') || (isSpanish ? 'No se ha proporcionado conclusión' : 'No conclusion provided');
       const chatHistory = JSON.parse(localStorage.getItem('brand_strategy_chat_history') || '[]');
       
+      // Set initial positioning
+      let yPos = PDF_STYLES.margins.top;
+      const leftMargin = PDF_STYLES.margins.left;
+      const rightMargin = 210 - PDF_STYLES.margins.right;
+      const contentWidth = rightMargin - leftMargin;
+      
+      // Add header with background
+      doc.setFillColor(PDF_STYLES.colors.primary);
+      doc.rect(0, 0, 210, 30, 'F');
+      
+      // Add header text
+      doc.setTextColor('#FFFFFF');
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(24);
+      doc.text(isSpanish ? "ESTRATEGIA DE MARCA" : "BRAND STRATEGY", leftMargin, 20);
+      
+      // Add IE University logo placeholder
+      doc.setFontSize(10);
+      doc.text("IE University", rightMargin - 22, 15);
+      
+      // Reposition after header
+      yPos = 40;
+      
+      // Add section: Brand Strategy Exercise
+      addSection(
+        doc, 
+        isSpanish ? "Ejercicio de Estrategia de Marca" : "Brand Strategy Exercise", 
+        brandStrategyAnswer,
+        leftMargin,
+        yPos,
+        contentWidth
+      );
+      
+      // Update position for next section
+      yPos += calcTextHeight(doc, brandStrategyAnswer, contentWidth) + PDF_STYLES.spacing.section + 10;
+      
+      // Add Channels Exercise section
+      doc.setFillColor(PDF_STYLES.colors.lightGray);
+      doc.rect(leftMargin - 5, yPos - 5, contentWidth + 10, 10, 'F');
+      doc.setTextColor(PDF_STYLES.colors.primary);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.text(isSpanish ? "Ejercicio de Canales" : "Channels Exercise", leftMargin, yPos);
+      
+      yPos += 10;
+      doc.setTextColor(PDF_STYLES.colors.text);
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(20);
-      doc.text(isSpanish ? "Respuestas de Ejercicios" : "Exercise Answers", 20, 20);
+      doc.setFontSize(11);
       
-      doc.setFontSize(16);
-      doc.text(isSpanish ? "Ejercicio de Estrategia de Marca" : "Brand Strategy Exercise", 20, 40);
-      doc.setFontSize(12);
-      const brandStrategyLines = doc.splitTextToSize(brandStrategyAnswer, 170);
-      doc.text(brandStrategyLines, 20, 50);
-      
-      let yOffset = 50 + (brandStrategyLines.length * 7);
-      doc.setFontSize(16);
-      doc.text(isSpanish ? "Ejercicio de Canales" : "Channels Exercise", 20, yOffset);
-      doc.setFontSize(12);
-      
-      channelsAnswers.forEach((answer: string, index: number) => {
-        const message = messages[index];
-        const text = isSpanish 
-          ? `Mensaje ${index + 1}: ${answer}`
-          : `Message ${index + 1}: ${answer}`;
-        doc.text(text, 20, yOffset + 10 + (index * 10));
+      // Add each channel answer
+      channelsAnswers.forEach((answer, index) => {
+        if (yPos > 270) {
+          doc.addPage();
+          yPos = PDF_STYLES.margins.top;
+          
+          // Add page header
+          doc.setFillColor(PDF_STYLES.colors.lightGray);
+          doc.rect(0, 0, 210, 15, 'F');
+          doc.setTextColor(PDF_STYLES.colors.primary);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(12);
+          doc.text(isSpanish ? "ESTRATEGIA DE MARCA - Continuación" : "BRAND STRATEGY - Continued", leftMargin, 10);
+        }
+        
+        // Message heading with accent color
+        doc.setTextColor(PDF_STYLES.colors.secondary);
+        doc.setFont("helvetica", "bold");
+        const messageLabel = isSpanish ? `Mensaje ${index + 1}` : `Message ${index + 1}`;
+        doc.text(messageLabel, leftMargin, yPos);
+        doc.setTextColor(PDF_STYLES.colors.mediumGray);
+        doc.setFontSize(9);
+        doc.setFont("helvetica", "italic");
+        const messageTruncated = messages[index].substring(0, 50) + (messages[index].length > 50 ? "..." : "");
+        doc.text(`"${messageTruncated}"`, leftMargin + 25, yPos);
+        
+        // Add answer
+        yPos += 8;
+        doc.setTextColor(PDF_STYLES.colors.text);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(11);
+        const answerLines = doc.splitTextToSize(answer, contentWidth);
+        doc.text(answerLines, leftMargin, yPos);
+        
+        yPos += answerLines.length * PDF_STYLES.spacing.paragraph + 5;
       });
       
-      yOffset = yOffset + 10 + (channelsAnswers.length * 10) + 10;
-      doc.setFontSize(16);
-      doc.text(isSpanish ? "Conclusión" : "Conclusion", 20, yOffset);
-      doc.setFontSize(12);
-      const conclusionLines = doc.splitTextToSize(conclusion, 170);
-      doc.text(conclusionLines, 20, yOffset + 10);
+      // Add conclusion section
+      yPos += 5;
+      if (yPos > 250) {
+        doc.addPage();
+        yPos = PDF_STYLES.margins.top;
+      }
       
-      yOffset = yOffset + 10 + (conclusionLines.length * 7) + 10;
+      // Add decorative element
+      doc.setDrawColor(PDF_STYLES.colors.primary);
+      doc.setLineWidth(1);
+      doc.line(leftMargin, yPos, rightMargin, yPos);
+      yPos += 10;
       
+      addSection(
+        doc, 
+        isSpanish ? "Conclusión" : "Conclusion", 
+        conclusion,
+        leftMargin,
+        yPos,
+        contentWidth
+      );
+      
+      // Update position for chat history
+      yPos += calcTextHeight(doc, conclusion, contentWidth) + PDF_STYLES.spacing.section + 10;
+      
+      // Add chat history if available
       if (chatHistory.length > 0) {
+        if (yPos > 250) {
+          doc.addPage();
+          yPos = PDF_STYLES.margins.top;
+          
+          // Add page header
+          doc.setFillColor(PDF_STYLES.colors.lightGray);
+          doc.rect(0, 0, 210, 15, 'F');
+          doc.setTextColor(PDF_STYLES.colors.primary);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(12);
+          doc.text(isSpanish ? "ESTRATEGIA DE MARCA - Continuación" : "BRAND STRATEGY - Continued", leftMargin, 10);
+          yPos = 25;
+        }
+        
+        // Conversation header
+        doc.setFillColor(PDF_STYLES.colors.primary);
+        doc.setTextColor('#FFFFFF');
+        doc.setFont("helvetica", "bold");
         doc.setFontSize(16);
-        doc.text(isSpanish ? "Conversación" : "Conversation", 20, yOffset);
-        doc.setFontSize(12);
+        doc.rect(leftMargin - 5, yPos - 5, contentWidth + 10, 10, 'F');
+        doc.text(isSpanish ? "Conversación" : "Conversation", leftMargin, yPos);
         
-        let chatYOffset = yOffset + 10;
+        yPos += 10;
         
-        chatHistory.forEach((message: any) => {
-          if (chatYOffset > 270) {
+        // Add each message in the chat
+        chatHistory.forEach((message) => {
+          if (yPos > 250) {
             doc.addPage();
-            chatYOffset = 20;
+            yPos = PDF_STYLES.margins.top;
+            
+            // Add page header
+            doc.setFillColor(PDF_STYLES.colors.lightGray);
+            doc.rect(0, 0, 210, 15, 'F');
+            doc.setTextColor(PDF_STYLES.colors.primary);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(12);
+            doc.text(isSpanish ? "CONVERSACIÓN - Continuación" : "CONVERSATION - Continued", leftMargin, 10);
+            yPos = 25;
           }
           
-          const sender = message.role === 'user' 
+          // Sender label with background color
+          const isUser = message.role === 'user';
+          doc.setFillColor(isUser ? PDF_STYLES.colors.secondary : PDF_STYLES.colors.primary);
+          doc.setTextColor('#FFFFFF');
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(10);
+          
+          const sender = isUser 
             ? (isSpanish ? "Tú" : "You") 
             : (isSpanish ? "Asistente" : "Assistant");
           
-          doc.setFont("helvetica", "bold");
-          doc.text(`${sender} (${message.timestamp}):`, 20, chatYOffset);
+          // Draw rounded rectangle for sender
+          const senderWidth = doc.getTextWidth(`${sender} (${message.timestamp})`) + 6;
+          doc.roundedRect(leftMargin - 3, yPos - 5, senderWidth, 7, 1, 1, 'F');
+          doc.text(`${sender} (${message.timestamp})`, leftMargin, yPos);
+          
+          // Message content
+          yPos += 8;
+          doc.setTextColor(PDF_STYLES.colors.text);
           doc.setFont("helvetica", "normal");
+          doc.setFontSize(10);
           
-          const messageLines = doc.splitTextToSize(message.content, 170);
-          doc.text(messageLines, 20, chatYOffset + 5);
+          const messageLines = doc.splitTextToSize(message.content, contentWidth);
+          doc.text(messageLines, leftMargin, yPos);
           
-          chatYOffset += 10 + (messageLines.length * 5);
+          yPos += messageLines.length * 5 + 8;
         });
       }
       
+      // Add footer on each page
+      const pageCount = doc.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        
+        // Add gradient footer
+        doc.setFillColor(245, 245, 245);
+        doc.rect(0, 280, 210, 17, 'F');
+        
+        // Add page number
+        doc.setTextColor(PDF_STYLES.colors.mediumGray);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.text(
+          `${isSpanish ? 'Página' : 'Page'} ${i} ${isSpanish ? 'de' : 'of'} ${pageCount}`, 
+          105, 
+          287, 
+          { align: 'center' }
+        );
+        
+        // Add copyright
+        const year = new Date().getFullYear();
+        doc.text(
+          `© ${year} IE University. ${isSpanish ? 'Todos los derechos reservados.' : 'All rights reserved.'}`,
+          105,
+          292,
+          { align: 'center' }
+        );
+      }
+      
+      // Save the PDF
       doc.save(isSpanish ? 'respuestas-ejercicios.pdf' : 'exercise-answers.pdf');
       toast.success(isSpanish 
         ? "PDF descargado correctamente." 
@@ -107,6 +283,33 @@ const DownloadSection = () => {
         : "Error generating PDF. Please try again.");
       console.error('Error generating PDF:', error);
     }
+  };
+
+  // Helper function to add a section with title and content
+  const addSection = (doc, title, content, x, y, width) => {
+    // Add section title with background
+    doc.setFillColor(PDF_STYLES.colors.primary);
+    doc.setTextColor('#FFFFFF');
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.rect(x - 5, y - 5, width + 10, 10, 'F');
+    doc.text(title, x, y);
+    
+    // Add content
+    y += 10;
+    doc.setTextColor(PDF_STYLES.colors.text);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    const contentLines = doc.splitTextToSize(content, width);
+    doc.text(contentLines, x, y);
+    
+    return y + contentLines.length * PDF_STYLES.spacing.paragraph;
+  };
+
+  // Helper function to calculate text height
+  const calcTextHeight = (doc, text, width) => {
+    const lines = doc.splitTextToSize(text, width);
+    return lines.length * PDF_STYLES.spacing.paragraph;
   };
 
   return (
